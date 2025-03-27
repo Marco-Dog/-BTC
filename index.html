@@ -68,116 +68,33 @@
             <button onclick="addTransaction()">新增交易</button>
         </div>
 
-        <div class="container">
-            <h1>匯入交易紀錄</h1>
+        <!-- 顯示交易紀錄的表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>幣種</th>
+                    <th>類型</th>
+                    <th>價格</th>
+                    <th>數量</th>
+                    <th>手續費</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable"></tbody>
+        </table>
 
-            <!-- 檔案上傳 -->
-            <input type="file" id="csvFile" accept=".csv" />
-            <button onclick="uploadCSV()">上傳 CSV</button>
-            
-            <!-- 顯示交易紀錄的表格 -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>幣種</th>
-                        <th>類型</th>
-                        <th>價格</th>
-                        <th>數量</th>
-                        <th>手續費</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="transactionTable"></tbody>
-            </table>
-
-            <div class="footer">
-                <p>資料來源：CoinGecko API</p>
-            </div>
+        <div class="footer">
+            <p>資料來源：CoinGecko API</p>
         </div>
     </div>
 
     <script>
+        // 儲存交易紀錄的陣列
         let transactions = [];
         let previousPrices = {};
-        
-        // 每 10 秒更新一次即時價格
-        setInterval(fetchPrice, 10000); 
-        fetchPrice(); // 頁面加載時立即抓取一次即時價格
 
-        // 處理 CSV 上傳並解析
-        function uploadCSV() {
-            const file = document.getElementById('csvFile').files[0];
-            if (!file) {
-                alert("請選擇 CSV 檔案！");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const csvData = event.target.result;
-                parseCSV(csvData);
-            };
-            reader.readAsText(file);
-        }
-
-        // 解析 CSV 資料
-        function parseCSV(csvData) {
-            const rows = csvData.split('\n');
-            const header = rows[0].split(',');
-
-            const indices = {
-                transactionTime: header.indexOf('Transaction Time'),
-                orderType: header.indexOf('Order Type'),
-                executedPrice: header.indexOf('Executed Price'),
-                executedQuantity: header.indexOf('Executed Quantity'),
-                baseCurrency: header.indexOf('Base Currency'),
-                totalFees: header.indexOf('Total Fees (Converted to TWD)')
-            };
-
-            const transactions = [];
-            for (let i = 1; i < rows.length; i++) {
-                const columns = rows[i].split(',');
-
-                if (columns.length < header.length) continue;
-
-                const transaction = {
-                    transactionTime: columns[indices.transactionTime],
-                    orderType: columns[indices.orderType],
-                    executedPrice: parseFloat(columns[indices.executedPrice]),
-                    executedQuantity: parseFloat(columns[indices.executedQuantity]),
-                    baseCurrency: columns[indices.baseCurrency],
-                    totalFees: parseFloat(columns[indices.totalFees])
-                };
-
-                transactions.push(transaction);
-            }
-            displayTransactions(transactions);
-        }
-
-        // 顯示交易紀錄
-        function displayTransactions(transactions) {
-            const tbody = document.getElementById('transactionTable');
-            tbody.innerHTML = ''; 
-
-            transactions.forEach(transaction => {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${transaction.transactionTime}</td>
-                    <td>${transaction.baseCurrency}</td>
-                    <td>${transaction.orderType}</td>
-                    <td>${transaction.executedPrice}</td>
-                    <td>${transaction.executedQuantity}</td>
-                    <td>${transaction.totalFees}</td>
-                    <td><button onclick="deleteTransaction(${transactions.indexOf(transaction)})">刪除</button></td>
-                `;
-
-                tbody.appendChild(row);
-            });
-        }
-
-        // 顯示即時價格
+        // 取得即時價格
         async function fetchPrice() {
             try {
                 const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,cardano,dogecoin,shiba-inu,ethereum&vs_currencies=twd');
@@ -216,9 +133,9 @@
             transactions.forEach(transaction => {
                 let transactionFee = 0;
                 if (transaction.type === 'buy') {
-                    transactionFee = (transaction.price * transaction.amount) * 0.001; 
+                    transactionFee = (transaction.price * transaction.amount) * 0.001; // 0.1% 手續費
                 } else if (transaction.type === 'sell') {
-                    transactionFee = (transaction.price * transaction.amount) * 0.002; 
+                    transactionFee = (transaction.price * transaction.amount) * 0.002; // 0.2% 手續費
                 }
 
                 // 計算每筆交易的損益
@@ -267,25 +184,15 @@
             document.getElementById('ethProfit').textContent = `以太坊 (ETH): NT$${ethProfit.toFixed(2)}`;
 
             let totalProfit = totalReturn - totalInvested;
-            document.getElementById('totalProfit').textContent = totalProfit.toFixed(2);
             let roi = (totalProfit / totalInvested) * 100;
-            document.getElementById('totalROI').textContent = roi.toFixed(2) + '%';
+
+            document.getElementById('totalProfit').textContent = totalProfit.toFixed(2);
+            document.getElementById('totalROI').textContent = `${roi.toFixed(2)}%`;
         }
 
-        // 顯示或隱藏頁籤
-        function showTab(tab) {
-            document.getElementById('pricesTab').style.display = tab === 'pricesTab' ? 'block' : 'none';
-            document.getElementById('profitsTab').style.display = tab === 'profitsTab' ? 'block' : 'none';
-            document.getElementById('pricesTabBtn').classList.toggle('active', tab === 'pricesTab');
-            document.getElementById('profitsTabBtn').classList.toggle('active', tab === 'profitsTab');
-        }
-
-        // 刪除交易紀錄
-        function deleteTransaction(index) {
-            transactions.splice(index, 1);
-            displayTransactions(transactions);
-            updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth);
-        }
+        // 每 10 秒更新一次即時價格
+        setInterval(fetchPrice, 10000); 
+        fetchPrice(); // 頁面加載時立即抓取一次即時價格
 
         // 新增交易紀錄
         function addTransaction() {
@@ -295,24 +202,48 @@
             const price = parseFloat(document.getElementById('price').value);
             const amount = parseFloat(document.getElementById('amount').value);
 
-            if (!date || !coin || !type || !price || !amount) {
-                alert("請填寫完整資料！");
-                return;
-            }
+            // 將交易資料添加到交易紀錄中
+            transactions.push({ date, coin, type, price, amount });
 
-            const transaction = {
-                date: date,
-                coin: coin,
-                type: type,
-                price: price,
-                amount: amount
-            };
-
-            transactions.push(transaction);
-            displayTransactions(transactions);
+            // 更新表格顯示
+            updateTransactionTable();
+            // 更新獲利顯示
             updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth);
         }
 
+        // 更新交易紀錄表格
+        function updateTransactionTable() {
+            const tableBody = document.getElementById('transactionTable');
+            tableBody.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.date}</td>
+                    <td>${transaction.coin}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.price}</td>
+                    <td>${transaction.amount}</td>
+                    <td>${(transaction.price * transaction.amount * (transaction.type === 'buy' ? 0.001 : 0.002)).toFixed(2)}</td>
+                    <td><button onclick="deleteTransaction(${transactions.indexOf(transaction)})">刪除</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 刪除交易紀錄
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            updateTransactionTable();
+            updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth);
+        }
+
+        // 顯示頁籤
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabName).style.display = 'block';
+        }
     </script>
 </body>
 </html>

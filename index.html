@@ -32,27 +32,10 @@
             font-weight: bold;
             color: #4caf50;
         }
-        #btcPrice, #ethPrice {
-            font-size: 1.8rem;
-            color: #555;
-        }
-        #btcProfit, #ethProfit {
-            font-size: 1.5rem;
-            color: #333;
-            margin-top: 20px;
-        }
-        .record-form {
-            margin-top: 30px;
-        }
-        .record-form input {
+        .record-form input, .record-form select, .record-form button {
             margin: 10px;
             padding: 8px;
             font-size: 1rem;
-        }
-        .footer {
-            font-size: 1rem;
-            margin-top: 30px;
-            color: #777;
         }
         table {
             width: 100%;
@@ -70,13 +53,18 @@
             background-color: #4caf50;
             color: white;
         }
+        .footer {
+            font-size: 1rem;
+            margin-top: 30px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>即時虛擬貨幣價格與持倉獲利</h1>
-        
+
         <!-- 比特幣和以太坊顯示區域 -->
         <div class="price">
             <h2>比特幣 (BTC) 價格:</h2>
@@ -92,26 +80,41 @@
         <!-- 交易紀錄輸入區域 -->
         <div class="record-form">
             <h3>新增交易紀錄</h3>
-            <input type="text" id="coinType" placeholder="虛擬貨幣 (BTC/ETH)" />
-            <input type="number" id="amount" placeholder="數量" />
-            <input type="number" id="purchasePrice" placeholder="購買價格 (USD)" />
-            <button onclick="addTransaction()">新增紀錄</button>
+            <label>日期：</label>
+            <input type="date" id="date">
+            <label>幣種：</label>
+            <select id="coin">
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="ADA">ADA</option>
+                <option value="DOGE">DOGE</option>
+                <option value="SHIB">SHIB</option>
+            </select>
+            <label>買/賣：</label>
+            <select id="type">
+                <option value="buy">買入</option>
+                <option value="sell">賣出</option>
+            </select>
+            <label>價格：</label>
+            <input type="number" id="price" step="0.01">
+            <label>數量：</label>
+            <input type="number" id="amount" step="0.0001">
+            <button onclick="addTransaction()">新增交易</button>
         </div>
 
-        <!-- 交易紀錄表格 -->
-        <h3>交易紀錄</h3>
-        <table id="transactionTable">
+        <!-- 顯示交易紀錄的表格 -->
+        <table>
             <thead>
                 <tr>
-                    <th>虛擬貨幣</th>
+                    <th>日期</th>
+                    <th>幣種</th>
+                    <th>類型</th>
+                    <th>價格</th>
                     <th>數量</th>
-                    <th>購買價格 (USD)</th>
-                    <th>持倉獲利 (USD)</th>
+                    <th>操作</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- 交易紀錄將動態填充於此 -->
-            </tbody>
+            <tbody id="transactionTable"></tbody>
         </table>
 
         <div class="footer">
@@ -120,120 +123,110 @@
     </div>
 
     <script>
-        let lastPriceBTC = 0; // 记录上次成功的比特币价格
-        let lastPriceETH = 0; // 记录上次成功的以太坊价格
-
         // 儲存交易紀錄的陣列
         let transactions = [];
 
-        // 假設持有的虛擬貨幣數量（此處為預設值，會根據交易紀錄更新）
-        const btcAmount = 1.5; // 1.5 BTC
-        const ethAmount = 10; // 10 ETH
-
-        // 初始購買價格（此處為預設值，會根據交易紀錄更新）
-        const btcPurchasePrice = 30000; // 假設您以 30,000 USD 購入比特幣
-        const ethPurchasePrice = 2000;  // 假設您以 2,000 USD 購入以太坊
-
-        // 函數：從 CoinGecko API 獲取價格並更新頁面
-        async function fetchPriceFromCoinGecko(coinId, elementId, profitElementId, purchasePrice, amount) {
-            const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`;
+        // 取得即時價格
+        async function fetchPrice() {
             try {
-                const response = await fetch(url);
-                const data = await response.json();
-                console.log("API 回應:", data);  // 打印 API 回應，幫助排查問題
+                const btcResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+                const ethResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+                
+                const btcData = await btcResponse.json();
+                const ethData = await ethResponse.json();
+                
+                const btcPrice = btcData.bitcoin.usd;
+                const ethPrice = ethData.ethereum.usd;
+                
+                document.getElementById('btcPrice').textContent = `${btcPrice} USD`;
+                document.getElementById('ethPrice').textContent = `${ethPrice} USD`;
 
-                if (!data[coinId]) {
-                    throw new Error(`無法找到 ${coinId} 的價格資料`);
-                }
-
-                const price = data[coinId].usd; // 取得 USD 價格
-
-                // 更新頁面顯示
-                document.getElementById(elementId).textContent = `$${price} USD`;
-
-                // 計算持倉獲利
-                const profit = (price - purchasePrice) * amount; // 計算獲利
-                document.getElementById(profitElementId).textContent = `持倉獲利: $${profit.toFixed(2)} USD`;
-
-                // 更新上次價格
-                if (coinId === "bitcoin") {
-                    lastPriceBTC = price;
-                } else if (coinId === "ethereum") {
-                    lastPriceETH = price;
-                }
+                updateProfits(btcPrice, ethPrice); // 更新獲利
             } catch (error) {
                 console.error('錯誤:', error);
-                // 在網頁上顯示錯誤訊息
-                document.getElementById(elementId).textContent = '無法取得價格';
-                document.getElementById(profitElementId).textContent = '無法計算獲利';
+                document.getElementById('btcPrice').textContent = '無法取得價格';
+                document.getElementById('ethPrice').textContent = '無法取得價格';
             }
         }
 
-        // 當頁面載入完成後，獲取比特幣和以太坊的即時價格
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchPriceFromCoinGecko("bitcoin", "btcPrice", "btcProfit", btcPurchasePrice, btcAmount);  // 比特幣
-            fetchPriceFromCoinGecko("ethereum", "ethPrice", "ethProfit", ethPurchasePrice, ethAmount);  // 以太坊
-        });
+        // 更新獲利顯示
+        function updateProfits(btcPrice, ethPrice) {
+            let btcProfit = 0;
+            let ethProfit = 0;
 
-        // 每 10 秒更新一次價格
-        setInterval(() => {
-            fetchPriceFromCoinGecko("bitcoin", "btcPrice", "btcProfit", btcPurchasePrice, btcAmount);  // 更新比特幣價格
-            fetchPriceFromCoinGecko("ethereum", "ethPrice", "ethProfit", ethPurchasePrice, ethAmount);  // 更新以太坊價格
-        }, 10000);
+            transactions.forEach(transaction => {
+                if (transaction.coin === 'BTC') {
+                    btcProfit += (btcPrice - transaction.price) * transaction.amount;
+                } else if (transaction.coin === 'ETH') {
+                    ethProfit += (ethPrice - transaction.price) * transaction.amount;
+                }
+            });
+
+            document.getElementById('btcProfit').textContent = `持倉獲利: $${btcProfit.toFixed(2)} USD`;
+            document.getElementById('ethProfit').textContent = `持倉獲利: $${ethProfit.toFixed(2)} USD`;
+        }
+
+        // 每 10 秒更新一次即時價格
+        setInterval(fetchPrice, 10000); 
+        fetchPrice(); // 頁面加載時立即抓取一次即時價格
 
         // 新增交易紀錄
         function addTransaction() {
-            const coinType = document.getElementById('coinType').value.toUpperCase();
-            const amount = parseFloat(document.getElementById('amount').value);
-            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            const date = document.getElementById("date").value;
+            const coin = document.getElementById("coin").value;
+            const type = document.getElementById("type").value;
+            const price = parseFloat(document.getElementById("price").value);
+            const amount = parseFloat(document.getElementById("amount").value);
 
-            if (!coinType || !amount || !purchasePrice) {
-                alert('請填寫所有欄位!');
+            if (!date || !coin || isNaN(price) || isNaN(amount)) {
+                alert("請填寫完整資訊");
                 return;
             }
 
-            // 新增交易到紀錄
-            transactions.push({ coinType, amount, purchasePrice });
-
-            // 更新交易紀錄表格
-            updateTransactionTable();
+            transactions.push({ date, coin, type, price, amount });
+            saveTransactions();
+            loadTransactions();
         }
 
-        // 更新交易紀錄表格
-        function updateTransactionTable() {
-            const tbody = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = ''; // 清空表格內容
+        // 儲存交易紀錄到 localStorage
+        function saveTransactions() {
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+        }
 
-            transactions.forEach(transaction => {
-                const row = tbody.insertRow();
+        // 載入交易紀錄
+        function loadTransactions() {
+            const storedTransactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            transactions = storedTransactions;
+            const tableBody = document.getElementById("transactionTable");
+            tableBody.innerHTML = "";
 
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                const cell4 = row.insertCell(3);
-
-                cell1.textContent = transaction.coinType;
-                cell2.textContent = transaction.amount;
-                cell3.textContent = `$${transaction.purchasePrice}`;
-                cell4.textContent = calculateProfit(transaction.coinType, transaction.amount, transaction.purchasePrice);
+            transactions.forEach((t, index) => {
+                const row = `<tr>
+                    <td>${t.date}</td>
+                    <td>${t.coin}</td>
+                    <td>${t.type === 'buy' ? '買入' : '賣出'}</td>
+                    <td>${t.price}</td>
+                    <td>${t.amount}</td>
+                    <td><button onclick="deleteTransaction(${index})">刪除</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
             });
+
+            const latestBtcPrice = parseFloat(document.getElementById('btcPrice').textContent.split(' ')[0]);
+            const latestEthPrice = parseFloat(document.getElementById('ethPrice').textContent.split(' ')[0]);
+
+            updateProfits(latestBtcPrice, latestEthPrice); // 更新獲利
         }
 
-        // 計算每筆交易的獲利
-        function calculateProfit(coinType, amount, purchasePrice) {
-            let price = 0;
-            if (coinType === "BTC") {
-                price = lastPriceBTC;
-            } else if (coinType === "ETH") {
-                price = lastPriceETH;
-            }
-
-            if (price === 0) return '價格無法取得';
-
-            const profit = (price - purchasePrice) * amount;
-            return `$${profit.toFixed(2)}`;
+        // 刪除交易紀錄
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            saveTransactions();
+            loadTransactions();
         }
 
+        // 頁面加載時載入交易紀錄
+        document.addEventListener("DOMContentLoaded", loadTransactions);
     </script>
 
 </body>

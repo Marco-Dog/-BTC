@@ -11,13 +11,36 @@
     <div class="container">
         <h1>即時虛擬貨幣價格與持倉獲利</h1>
 
-        <!-- 即時價格顯示區域 -->
-        <div class="price-container">
-            <div class="price-item" id="btcPrice">比特幣 (BTC): 載入中...</div>
-            <div class="price-item" id="adaPrice">艾達幣 (ADA): 載入中...</div>
-            <div class="price-item" id="dogePrice">狗狗幣 (DOGE): 載入中...</div>
-            <div class="price-item" id="shibPrice">柴犬幣 (SHIB): 載入中...</div>
-            <div class="price-item" id="ethPrice">以太坊 (ETH): 載入中...</div>
+        <!-- 頁籤導航 -->
+        <div class="tabs">
+            <button onclick="showTab('pricesTab')" id="pricesTabBtn">即時價格</button>
+            <button onclick="showTab('profitsTab')" id="profitsTabBtn">總損益與報酬率</button>
+        </div>
+
+        <!-- 即時價格頁籤 -->
+        <div id="pricesTab" class="tab-content">
+            <div class="price-container">
+                <div class="price-item" id="btcPrice">比特幣 (BTC): 載入中...</div>
+                <div class="price-item" id="adaPrice">艾達幣 (ADA): 載入中...</div>
+                <div class="price-item" id="dogePrice">狗狗幣 (DOGE): 載入中...</div>
+                <div class="price-item" id="shibPrice">柴犬幣 (SHIB): 載入中...</div>
+                <div class="price-item" id="ethPrice">以太坊 (ETH): 載入中...</div>
+            </div>
+        </div>
+
+        <!-- 總損益與報酬率頁籤 -->
+        <div id="profitsTab" class="tab-content" style="display:none;">
+            <h3>虛擬貨幣總損益與報酬率</h3>
+            <div class="profit-item" id="btcProfit">比特幣 (BTC): NT$0</div>
+            <div class="profit-item" id="adaProfit">艾達幣 (ADA): NT$0</div>
+            <div class="profit-item" id="dogeProfit">狗狗幣 (DOGE): NT$0</div>
+            <div class="profit-item" id="shibProfit">柴犬幣 (SHIB): NT$0</div>
+            <div class="profit-item" id="ethProfit">以太坊 (ETH): NT$0</div>
+
+            <div class="total-profit">
+                <h4>總損益：NT$<span id="totalProfit">0</span></h4>
+                <h4>總投資報酬率：<span id="totalROI">0%</span></h4>
+            </div>
         </div>
 
         <!-- 交易紀錄輸入區域 -->
@@ -103,26 +126,59 @@
             let dogeProfit = 0;
             let shibProfit = 0;
             let ethProfit = 0;
+            let totalInvested = 0;
+            let totalReturn = 0;
 
             transactions.forEach(transaction => {
                 if (transaction.coin === 'BTC') {
+                    if (transaction.type === 'buy') {
+                        totalInvested += transaction.price * transaction.amount;
+                    } else {
+                        totalReturn += (btcPrice - transaction.price) * transaction.amount;
+                    }
                     btcProfit += (btcPrice - transaction.price) * transaction.amount;
                 } else if (transaction.coin === 'ADA') {
+                    if (transaction.type === 'buy') {
+                        totalInvested += transaction.price * transaction.amount;
+                    } else {
+                        totalReturn += (adaPrice - transaction.price) * transaction.amount;
+                    }
                     adaProfit += (adaPrice - transaction.price) * transaction.amount;
                 } else if (transaction.coin === 'DOGE') {
+                    if (transaction.type === 'buy') {
+                        totalInvested += transaction.price * transaction.amount;
+                    } else {
+                        totalReturn += (dogePrice - transaction.price) * transaction.amount;
+                    }
                     dogeProfit += (dogePrice - transaction.price) * transaction.amount;
                 } else if (transaction.coin === 'SHIB') {
+                    if (transaction.type === 'buy') {
+                        totalInvested += transaction.price * transaction.amount;
+                    } else {
+                        totalReturn += (shibPrice - transaction.price) * transaction.amount;
+                    }
                     shibProfit += (shibPrice - transaction.price) * transaction.amount;
                 } else if (transaction.coin === 'ETH') {
+                    if (transaction.type === 'buy') {
+                        totalInvested += transaction.price * transaction.amount;
+                    } else {
+                        totalReturn += (ethPrice - transaction.price) * transaction.amount;
+                    }
                     ethProfit += (ethPrice - transaction.price) * transaction.amount;
                 }
             });
 
-            document.getElementById('btcProfit').textContent = `持倉獲利: NT$${btcProfit.toFixed(2)}`;
-            document.getElementById('adaProfit').textContent = `持倉獲利: NT$${adaProfit.toFixed(2)}`;
-            document.getElementById('dogeProfit').textContent = `持倉獲利: NT$${dogeProfit.toFixed(2)}`;
-            document.getElementById('shibProfit').textContent = `持倉獲利: NT$${shibProfit.toFixed(2)}`;
-            document.getElementById('ethProfit').textContent = `持倉獲利: NT$${ethProfit.toFixed(2)}`;
+            document.getElementById('btcProfit').textContent = `比特幣 (BTC): NT$${btcProfit.toFixed(2)}`;
+            document.getElementById('adaProfit').textContent = `艾達幣 (ADA): NT$${adaProfit.toFixed(2)}`;
+            document.getElementById('dogeProfit').textContent = `狗狗幣 (DOGE): NT$${dogeProfit.toFixed(2)}`;
+            document.getElementById('shibProfit').textContent = `柴犬幣 (SHIB): NT$${shibProfit.toFixed(2)}`;
+            document.getElementById('ethProfit').textContent = `以太坊 (ETH): NT$${ethProfit.toFixed(2)}`;
+
+            let totalProfit = totalReturn - totalInvested;
+            let roi = (totalProfit / totalInvested) * 100;
+
+            document.getElementById('totalProfit').textContent = totalProfit.toFixed(2);
+            document.getElementById('totalROI').textContent = `${roi.toFixed(2)}%`;
         }
 
         // 每 10 秒更新一次即時價格
@@ -179,6 +235,18 @@
             transactions.splice(index, 1);
             saveTransactions();
             loadTransactions();
+        }
+
+        // 顯示頁籤
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabName).style.display = 'block';
+
+            // 更新頁籤按鈕樣式
+            const buttons = document.querySelectorAll('.tabs button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.getElementById(tabName + 'Btn').classList.add('active');
         }
 
         // 頁面加載時載入交易紀錄

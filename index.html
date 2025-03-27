@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>虛擬貨幣即時價格</title>
+    <title>虛擬貨幣即時價格與持倉獲利</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,6 +36,11 @@
             font-size: 1.8rem;
             color: #555;
         }
+        #btcProfit, #ethProfit {
+            font-size: 1.5rem;
+            color: #333;
+            margin-top: 20px;
+        }
         .footer {
             font-size: 1rem;
             margin-top: 30px;
@@ -46,14 +51,16 @@
 <body>
 
     <div class="container">
-        <h1>即時虛擬貨幣價格</h1>
+        <h1>即時虛擬貨幣價格與持倉獲利</h1>
         <div class="price">
             <h2>比特幣 (BTC) 價格:</h2>
             <p id="btcPrice">載入中...</p>
+            <p id="btcProfit">持倉獲利: 載入中...</p>
         </div>
         <div class="price">
             <h2>以太坊 (ETH) 價格:</h2>
             <p id="ethPrice">載入中...</p>
+            <p id="ethProfit">持倉獲利: 載入中...</p>
         </div>
         <div class="footer">
             <p>資料來源：CoinGecko API</p>
@@ -61,157 +68,69 @@
     </div>
 
     <script>
+        let lastPriceBTC = 0; // 记录上次成功的比特币价格
+        let lastPriceETH = 0; // 记录上次成功的以太坊价格
+
+        // 假設持有的虛擬貨幣數量
+        const btcAmount = 1.5; // 1.5 BTC
+        const ethAmount = 10; // 10 ETH
+
+        // 初始購買價格，假設為購買時的價格
+        const btcPurchasePrice = 30000; // 假設您以 30,000 USD 購入比特幣
+        const ethPurchasePrice = 2000;  // 假設您以 2,000 USD 購入以太坊
+
         // 函數：從 CoinGecko API 獲取價格並更新頁面
-        async function fetchPriceFromCoinGecko(coinId, elementId) {
+        async function fetchPriceFromCoinGecko(coinId, elementId, profitElementId, purchasePrice, amount) {
             const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data); // 輸出 API 回應資料結構
                 const price = data[coinId].usd; // 取得 USD 價格
-                document.getElementById(elementId).textContent = `$${price} USD`; // 更新頁面上的價格
+
+                // 更新頁面顯示
+                document.getElementById(elementId).textContent = `$${price} USD`;
+
+                // 計算持倉獲利
+                const profit = (price - purchasePrice) * amount; // 計算獲利
+                document.getElementById(profitElementId).textContent = `持倉獲利: $${profit.toFixed(2)} USD`;
+
+                // 更新上次價格
+                if (coinId === "bitcoin") {
+                    lastPriceBTC = price;
+                } else if (coinId === "ethereum") {
+                    lastPriceETH = price;
+                }
             } catch (error) {
                 console.error('無法取得即時價格:', error);
-                document.getElementById(elementId).textContent = '無法取得價格'; // 錯誤處理
+
+                // 如果價格無法取得，顯示上次成功的價格
+                if (coinId === "bitcoin" && lastPriceBTC !== 0) {
+                    document.getElementById(elementId).textContent = `$${lastPriceBTC} USD (從上次獲取)`;
+                    const profit = (lastPriceBTC - purchasePrice) * amount;
+                    document.getElementById(profitElementId).textContent = `持倉獲利: $${profit.toFixed(2)} USD`;
+                } else if (coinId === "ethereum" && lastPriceETH !== 0) {
+                    document.getElementById(elementId).textContent = `$${lastPriceETH} USD (從上次獲取)`;
+                    const profit = (lastPriceETH - purchasePrice) * amount;
+                    document.getElementById(profitElementId).textContent = `持倉獲利: $${profit.toFixed(2)} USD`;
+                } else {
+                    document.getElementById(elementId).textContent = '無法取得價格';
+                    document.getElementById(profitElementId).textContent = '無法計算獲利';
+                }
             }
         }
 
         // 當頁面載入完成後，獲取比特幣和以太坊的即時價格
         document.addEventListener("DOMContentLoaded", () => {
-            fetchPriceFromCoinGecko("bitcoin", "btcPrice");  // 比特幣
-            fetchPriceFromCoinGecko("ethereum", "ethPrice");  // 以太坊
+            fetchPriceFromCoinGecko("bitcoin", "btcPrice", "btcProfit", btcPurchasePrice, btcAmount);  // 比特幣
+            fetchPriceFromCoinGecko("ethereum", "ethPrice", "ethProfit", ethPurchasePrice, ethAmount);  // 以太坊
         });
 
         // 每 10 秒更新一次價格
         setInterval(() => {
-            fetchPriceFromCoinGecko("bitcoin", "btcPrice");  // 更新比特幣價格
-            fetchPriceFromCoinGecko("ethereum", "ethPrice");  // 更新以太坊價格
+            fetchPriceFromCoinGecko("bitcoin", "btcPrice", "btcProfit", btcPurchasePrice, btcAmount);  // 更新比特幣價格
+            fetchPriceFromCoinGecko("ethereum", "ethPrice", "ethProfit", ethPurchasePrice, ethAmount);  // 更新以太坊價格
         }, 10000);
     </script>
 
-        <!-- 交易紀錄顯示區域 -->
-        <div class="transaction-records">
-            <h3>交易紀錄</h3>
-            <div>
-                <label>日期：</label>
-                <input type="date" id="date">
-                <label>幣種：</label>
-                <select id="coin">
-                    <option value="BTC">BTC</option>
-                    <option value="ETH">ETH</option>
-                </select>
-                <label>買/賣：</label>
-                <select id="type">
-                    <option value="buy">買入</option>
-                    <option value="sell">賣出</option>
-                </select>
-                <label>價格：</label>
-                <input type="number" id="price" step="0.01">
-                <label>數量：</label>
-                <input type="number" id="amount" step="0.0001">
-                <button onclick="addTransaction()">新增交易</button>
-            </div>
-
-            <!-- 顯示交易紀錄的表格 -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>幣種</th>
-                        <th>類型</th>
-                        <th>價格</th>
-                        <th>數量</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="transactionTable"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        // 設置抓取即時價格的功能
-        async function fetchPrice(coinPair, elementId) {
-            const url = `https://api.bitopro.com/v2/market/ticker/${coinPair}`; // API 端點
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const price = data.data.last; // 取得即時價格
-                document.getElementById(elementId).textContent = `${price} USDT`;
-            } catch (error) {
-                console.error('無法取得即時價格:', error);
-                document.getElementById(elementId).textContent = '無法取得價格';
-            }
-        }
-
-        // 頁面加載時立即抓取價格
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchPrice('BTC-USDT', 'btcPrice');  // 取得 BTC 的價格
-            fetchPrice('ETH-USDT', 'ethPrice');  // 取得 ETH 的價格
-        });
-
-        // 每 10 秒更新一次即時價格
-        setInterval(() => {
-            fetchPrice('BTC-USDT', 'btcPrice'); // 更新 BTC 價格
-            fetchPrice('ETH-USDT', 'ethPrice'); // 更新 ETH 價格
-        }, 10000);
-
-        // 新增交易紀錄
-        function addTransaction() {
-            const date = document.getElementById("date").value;
-            const coin = document.getElementById("coin").value;
-            const type = document.getElementById("type").value;
-            const price = parseFloat(document.getElementById("price").value);
-            const amount = parseFloat(document.getElementById("amount").value);
-
-            if (!date || !coin || isNaN(price) || isNaN(amount)) {
-                alert("請填寫完整資訊");
-                return;
-            }
-
-            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-            transactions.push({ date, coin, type, price, amount });
-            localStorage.setItem("transactions", JSON.stringify(transactions));
-            loadTransactions();
-        }
-
-        // 載入交易紀錄
-        function loadTransactions() {
-            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-            const tableBody = document.getElementById("transactionTable");
-            tableBody.innerHTML = "";
-            transactions.forEach((t, index) => {
-                const row = `<tr>
-                    <td><input type='date' value='${t.date}' onchange='editTransaction(${index}, "date", this.value)'></td>
-                    <td><input type='text' value='${t.coin}' onchange='editTransaction(${index}, "coin", this.value)'></td>
-                    <td>
-                        <select onchange='editTransaction(${index}, "type", this.value)'>
-                            <option value='buy' ${t.type === 'buy' ? 'selected' : ''}>買入</option>
-                            <option value='sell' ${t.type === 'sell' ? 'selected' : ''}>賣出</option>
-                        </select>
-                    </td>
-                    <td><input type='number' value='${t.price}' step='0.01' onchange='editTransaction(${index}, "price", this.value)'></td>
-                    <td><input type='number' value='${t.amount}' step='0.0001' onchange='editTransaction(${index}, "amount", this.value)'></td>
-                    <td><button onclick="deleteTransaction(${index})">刪除</button></td>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
-        }
-
-        // 刪除交易紀錄
-        function deleteTransaction(index) {
-            const transactions = JSON.parse(localStorage.getItem("transactions"));
-            transactions.splice(index, 1);
-            localStorage.setItem("transactions", JSON.stringify(transactions));
-            loadTransactions();
-        }
-
-        // 編輯交易紀錄
-        function editTransaction(index, key, value) {
-            const transactions = JSON.parse(localStorage.getItem("transactions"));
-            transactions[index][key] = key === "price" || key === "amount" ? parseFloat(value) : value;
-            localStorage.setItem("transactions", JSON.stringify(transactions));
-        }
-    </script>
 </body>
 </html>

@@ -67,7 +67,13 @@
             <input type="number" id="amount" step="0.0001">
             <button onclick="addTransaction()">新增交易</button>
         </div>
+        <div class="container">
+            <h1>匯入交易紀錄</h1>
 
+            <!-- 檔案上傳 -->
+            <input type="file" id="csvFile" accept=".csv" />
+            <button onclick="uploadCSV()">上傳 CSV</button>
+            
         <!-- 顯示交易紀錄的表格 -->
         <table>
             <thead>
@@ -90,6 +96,81 @@
     </div>
 
     <script>
+        // 處理 CSV 上傳並解析
+        function uploadCSV() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                alert("請選擇 CSV 檔案！");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvData = event.target.result;
+                parseCSV(csvData);
+            };
+            reader.readAsText(file);
+        }
+
+        // 解析 CSV 資料
+        function parseCSV(csvData) {
+            const rows = csvData.split('\n');
+            const header = rows[0].split(',');
+
+            // 要提取的欄位索引
+            const indices = {
+                transactionTime: header.indexOf('Transaction Time'),
+                orderType: header.indexOf('Order Type'),
+                executedPrice: header.indexOf('Executed Price'),
+                executedQuantity: header.indexOf('Executed Quantity'),
+                executedAmount: header.indexOf('Executed Amount'),
+                baseCurrency: header.indexOf('Base Currency'),
+                totalFees: header.indexOf('Total Fees (Converted to TWD)')
+            };
+
+            const transactions = [];
+            for (let i = 1; i < rows.length; i++) {
+                const columns = rows[i].split(',');
+
+                if (columns.length < header.length) continue;  // 忽略格式錯誤的行
+
+                // 提取需要的資料
+                const transaction = {
+                    transactionTime: columns[indices.transactionTime],
+                    orderType: columns[indices.orderType],
+                    executedPrice: parseFloat(columns[indices.executedPrice]),
+                    executedQuantity: parseFloat(columns[indices.executedQuantity]),
+                    executedAmount: parseFloat(columns[indices.executedAmount]),
+                    baseCurrency: columns[indices.baseCurrency],
+                    totalFees: parseFloat(columns[indices.totalFees])
+                };
+
+                transactions.push(transaction);
+            }
+
+            displayTransactions(transactions);
+        }
+
+        // 顯示交易紀錄
+        function displayTransactions(transactions) {
+            const tbody = document.getElementById('transactionBody');
+            tbody.innerHTML = '';  // 清空表格
+
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${transaction.transactionTime}</td>
+                    <td>${transaction.orderType}</td>
+                    <td>${transaction.executedPrice}</td>
+                    <td>${transaction.executedQuantity}</td>
+                    <td>${transaction.executedAmount}</td>
+                    <td>${transaction.totalFees}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
         // 儲存交易紀錄的陣列
         let transactions = [];
         let previousPrices = {};

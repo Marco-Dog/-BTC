@@ -4,71 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>虛擬貨幣即時價格與持倉獲利</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 50px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .price {
-            font-size: 2rem;
-            margin: 20px;
-        }
-        .price span {
-            font-weight: bold;
-            color: #4caf50;
-        }
-        .price-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .price-item {
-            margin: 10px;
-            font-size: 1.5rem;
-        }
-        .record-form input, .record-form select, .record-form button {
-            margin: 10px;
-            padding: 8px;
-            font-size: 1rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: center;
-        }
-        th {
-            background-color: #4caf50;
-            color: white;
-        }
-        .footer {
-            font-size: 1rem;
-            margin-top: 30px;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> <!-- 引入外部CSS文件 -->
 </head>
 <body>
 
@@ -80,7 +16,7 @@
             <div class="price-item" id="btcPrice">比特幣 (BTC): 載入中...</div>
             <div class="price-item" id="adaPrice">艾達幣 (ADA): 載入中...</div>
             <div class="price-item" id="dogePrice">狗狗幣 (DOGE): 載入中...</div>
-            <div class="price-item" id="shibPrice">希比幣 (SHIB): 載入中...</div>
+            <div class="price-item" id="shibPrice">柴犬幣 (SHIB): 載入中...</div>
             <div class="price-item" id="ethPrice">以太坊 (ETH): 載入中...</div>
         </div>
 
@@ -137,22 +73,22 @@
         // 取得即時價格
         async function fetchPrice() {
             try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,cardano,dogecoin,shiba-inu,ethereum&vs_currencies=usd');
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,cardano,dogecoin,shiba-inu,ethereum&vs_currencies=twd');
                 const data = await response.json();
 
-                const btcPrice = data.bitcoin.usd || previousPrices.btc || 0;
-                const adaPrice = data.cardano.usd || previousPrices.ada || 0;
-                const dogePrice = data.dogecoin.usd || previousPrices.doge || 0;
-                const shibPrice = data['shiba-inu'].usd || previousPrices.shib || 0;
-                const ethPrice = data.ethereum.usd || previousPrices.eth || 0;
+                const btcPrice = data.bitcoin.twd || previousPrices.btc || 0;
+                const adaPrice = data.cardano.twd || previousPrices.ada || 0;
+                const dogePrice = data.dogecoin.twd || previousPrices.doge || 0;
+                const shibPrice = data['shiba-inu'].twd || previousPrices.shib || 0;
+                const ethPrice = data.ethereum.twd || previousPrices.eth || 0;
 
                 previousPrices = { btc: btcPrice, ada: adaPrice, doge: dogePrice, shib: shibPrice, eth: ethPrice };
 
-                document.getElementById('btcPrice').textContent = `比特幣 (BTC): $${btcPrice} USD`;
-                document.getElementById('adaPrice').textContent = `艾達幣 (ADA): $${adaPrice} USD`;
-                document.getElementById('dogePrice').textContent = `狗狗幣 (DOGE): $${dogePrice} USD`;
-                document.getElementById('shibPrice').textContent = `希比幣 (SHIB): $${shibPrice} USD`;
-                document.getElementById('ethPrice').textContent = `以太坊 (ETH): $${ethPrice} USD`;
+                document.getElementById('btcPrice').textContent = `比特幣 (BTC): NT$${btcPrice}`;
+                document.getElementById('adaPrice').textContent = `艾達幣 (ADA): NT$${adaPrice}`;
+                document.getElementById('dogePrice').textContent = `狗狗幣 (DOGE): NT$${dogePrice}`;
+                document.getElementById('shibPrice').textContent = `柴犬幣 (SHIB): NT$${shibPrice}`;
+                document.getElementById('ethPrice').textContent = `以太坊 (ETH): NT$${ethPrice}`;
 
                 updateProfits(btcPrice, adaPrice, dogePrice, shibPrice, ethPrice); // 更新獲利
             } catch (error) {
@@ -182,11 +118,11 @@
                 }
             });
 
-            document.getElementById('btcProfit').textContent = `持倉獲利: $${btcProfit.toFixed(2)} USD`;
-            document.getElementById('adaProfit').textContent = `持倉獲利: $${adaProfit.toFixed(2)} USD`;
-            document.getElementById('dogeProfit').textContent = `持倉獲利: $${dogeProfit.toFixed(2)} USD`;
-            document.getElementById('shibProfit').textContent = `持倉獲利: $${shibProfit.toFixed(2)} USD`;
-            document.getElementById('ethProfit').textContent = `持倉獲利: $${ethProfit.toFixed(2)} USD`;
+            document.getElementById('btcProfit').textContent = `持倉獲利: NT$${btcProfit.toFixed(2)}`;
+            document.getElementById('adaProfit').textContent = `持倉獲利: NT$${adaProfit.toFixed(2)}`;
+            document.getElementById('dogeProfit').textContent = `持倉獲利: NT$${dogeProfit.toFixed(2)}`;
+            document.getElementById('shibProfit').textContent = `持倉獲利: NT$${shibProfit.toFixed(2)}`;
+            document.getElementById('ethProfit').textContent = `持倉獲利: NT$${ethProfit.toFixed(2)}`;
         }
 
         // 每 10 秒更新一次即時價格

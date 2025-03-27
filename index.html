@@ -29,7 +29,13 @@
             <label>日期：</label>
             <input type="date" id="date">
             <label>幣種：</label>
-            <input type="text" id="coin" placeholder="如 BTC">
+            <select id="coin">
+                <option value="BTC">BTC</option>
+                <option value="ADA">ADA</option>
+                <option value="DOGE">DOGE</option>
+                <option value="SHIB">SHIB</option>
+                <option value="ETH">ETH</option>
+            </select>
             <label>買/賣：</label>
             <select id="type">
                 <option value="buy">買入</option>
@@ -57,8 +63,15 @@
             <tbody id="transactionTable"></tbody>
         </table>
 
-        <!-- 顯示盈虧 -->
-        <div class="profit">總盈虧：<span id="totalProfit">0</span></div>
+        <!-- 顯示每個幣別的盈虧 -->
+        <div id="profits">
+            <h3>各幣種盈虧狀況</h3>
+            <div id="BTC_profit" class="profit">BTC: 0</div>
+            <div id="ADA_profit" class="profit">ADA: 0</div>
+            <div id="DOGE_profit" class="profit">DOGE: 0</div>
+            <div id="SHIB_profit" class="profit">SHIB: 0</div>
+            <div id="ETH_profit" class="profit">ETH: 0</div>
+        </div>
     </div>
 
     <script>
@@ -86,7 +99,7 @@
         // 新增交易紀錄
         function addTransaction() {
             const date = document.getElementById("date").value;
-            const coin = document.getElementById("coin").value.toUpperCase();
+            const coin = document.getElementById("coin").value;
             const type = document.getElementById("type").value;
             const price = parseFloat(document.getElementById("price").value);
             const amount = parseFloat(document.getElementById("amount").value);
@@ -142,14 +155,25 @@
             calculateProfit();
         }
 
-        // 計算總盈虧
+        // 計算每個幣別的盈虧
         function calculateProfit() {
             const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-            let profit = 0;
-            const holdings = {};
+            const profits = {
+                BTC: 0,
+                ADA: 0,
+                DOGE: 0,
+                SHIB: 0,
+                ETH: 0
+            };
+            const holdings = {
+                BTC: { totalBuy: 0, totalSell: 0, amount: 0 },
+                ADA: { totalBuy: 0, totalSell: 0, amount: 0 },
+                DOGE: { totalBuy: 0, totalSell: 0, amount: 0 },
+                SHIB: { totalBuy: 0, totalSell: 0, amount: 0 },
+                ETH: { totalBuy: 0, totalSell: 0, amount: 0 }
+            };
 
             transactions.forEach(t => {
-                if (!holdings[t.coin]) holdings[t.coin] = { totalBuy: 0, totalSell: 0, amount: 0 };
                 if (t.type === "buy") {
                     holdings[t.coin].totalBuy += t.price * t.amount;
                     holdings[t.coin].amount += t.amount;
@@ -160,10 +184,9 @@
             });
 
             for (let coin in holdings) {
-                profit += holdings[coin].totalSell - holdings[coin].totalBuy;
+                profits[coin] = holdings[coin].totalSell - holdings[coin].totalBuy;
+                document.getElementById(`${coin}_profit`).textContent = `${coin}: ${profits[coin].toFixed(2)}`;
             }
-
-            document.getElementById("totalProfit").textContent = profit.toFixed(2);
         }
     </script>
 </body>

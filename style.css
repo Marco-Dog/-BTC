@@ -20,14 +20,29 @@ h1 {
     color: #333;
 }
 
-.price {
-    font-size: 2rem;
-    margin: 20px;
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.price span {
-    font-weight: bold;
-    color: #4caf50;
+.tabs button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.tabs button.active {
+    background-color: #45a049;
+}
+
+.tab-content {
+    display: none;
 }
 
 .price-container {
@@ -37,7 +52,7 @@ h1 {
     flex-wrap: wrap;
 }
 
-.price-item {
+.price-item, .profit-item {
     margin: 10px;
     font-size: 1.5rem;
 }
@@ -72,4 +87,10 @@ th {
     font-size: 1rem;
     margin-top: 30px;
     color: #777;
+}
+
+.total-profit {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
 }

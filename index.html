@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虛擬貨幣交易紀錄與即時價格</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; }
+        .form-group { margin-bottom: 10px; }
+        .profit { font-size: 1.2em; font-weight: bold; margin-top: 20px; }
+        .real-time-price { font-size: 1.5em; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>虛擬貨幣交易紀錄與即時價格</h2>
+
+        <!-- 即時價格顯示區域 -->
+        <div class="real-time-price">
+            <h3>即時價格：<span id="realTimePrice">載入中...</span></h3>
+        </div>
+
+        <!-- 新增交易紀錄的表單 -->
+        <div>
+            <label>日期：</label>
+            <input type="date" id="date">
+            <label>幣種：</label>
+            <input type="text" id="coin" placeholder="如 BTC">
+            <label>買/賣：</label>
+            <select id="type">
+                <option value="buy">買入</option>
+                <option value="sell">賣出</option>
+            </select>
+            <label>價格：</label>
+            <input type="number" id="price" step="0.01">
+            <label>數量：</label>
+            <input type="number" id="amount" step="0.0001">
+            <button onclick="addTransaction()">新增交易</button>
+        </div>
+
+        <!-- 顯示交易紀錄的表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>幣種</th>
+                    <th>類型</th>
+                    <th>價格</th>
+                    <th>數量</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable"></tbody>
+        </table>
+
+        <!-- 顯示盈虧 -->
+        <div class="profit">總盈虧：<span id="totalProfit">0</span></div>
+    </div>
+
+    <script>
+        // 載入交易紀錄
+        document.addEventListener("DOMContentLoaded", loadTransactions);
+        
+        // 取得即時價格
+        async function fetchPrice() {
+            const url = 'https://api.bitopro.com/v2/market/ticker/BTC-USDT'; // 可以根據需要修改成其他交易對
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const price = data.data.last; // 即時價格
+                document.getElementById('realTimePrice').textContent = `${price} USDT`;
+            } catch (error) {
+                console.error('無法取得即時價格:', error);
+                document.getElementById('realTimePrice').textContent = '無法取得價格';
+            }
+        }
+
+        // 每 10 秒更新一次即時價格
+        setInterval(fetchPrice, 10000); 
+        fetchPrice(); // 頁面加載時立即抓取一次即時價格
+
+        // 新增交易紀錄
+        function addTransaction() {
+            const date = document.getElementById("date").value;
+            const coin = document.getElementById("coin").value.toUpperCase();
+            const type = document.getElementById("type").value;
+            const price = parseFloat(document.getElementById("price").value);
+            const amount = parseFloat(document.getElementById("amount").value);
+
+            if (!date || !coin || isNaN(price) || isNaN(amount)) {
+                alert("請填寫完整資訊");
+                return;
+            }
+
+            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            transactions.push({ date, coin, type, price, amount });
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+            loadTransactions();
+        }
+
+        // 載入交易紀錄
+        function loadTransactions() {
+            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            const tableBody = document.getElementById("transactionTable");
+            tableBody.innerHTML = "";
+            transactions.forEach((t, index) => {
+                const row = `<tr>
+                    <td><input type='date' value='${t.date}' onchange='editTransaction(${index}, "date", this.value)'></td>
+                    <td><input type='text' value='${t.coin}' onchange='editTransaction(${index}, "coin", this.value)'></td>
+                    <td>
+                        <select onchange='editTransaction(${index}, "type", this.value)'>
+                            <option value='buy' ${t.type === 'buy' ? 'selected' : ''}>買入</option>
+                            <option value='sell' ${t.type === 'sell' ? 'selected' : ''}>賣出</option>
+                        </select>
+                    </td>
+                    <td><input type='number' value='${t.price}' step='0.01' onchange='editTransaction(${index}, "price", this.value)'></td>
+                    <td><input type='number' value='${t.amount}' step='0.0001' onchange='editTransaction(${index}, "amount", this.value)'></td>
+                    <td><button onclick="deleteTransaction(${index})">刪除</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+            calculateProfit();
+        }
+
+        // 刪除交易紀錄
+        function deleteTransaction(index) {
+            const transactions = JSON.parse(localStorage.getItem("transactions"));
+            transactions.splice(index, 1);
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+            loadTransactions();
+        }
+
+        // 編輯交易紀錄
+        function editTransaction(index, key, value) {
+            const transactions = JSON.parse(localStorage.getItem("transactions"));
+            transactions[index][key] = key === "price" || key === "amount" ? parseFloat(value) : value;
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+            calculateProfit();
+        }
+
+        // 計算總盈虧
+        function calculateProfit() {
+            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            let profit = 0;
+            const holdings = {};
+
+            transactions.forEach(t => {
+                if (!holdings[t.coin]) holdings[t.coin] = { totalBuy: 0, totalSell: 0, amount: 0 };
+                if (t.type === "buy") {
+                    holdings[t.coin].totalBuy += t.price * t.amount;
+                    holdings[t.coin].amount += t.amount;
+                } else {
+                    holdings[t.coin].totalSell += t.price * t.amount;
+                    holdings[t.coin].amount -= t.amount;
+                }
+            });
+
+            for (let coin in holdings) {
+                profit += holdings[coin].totalSell - holdings[coin].totalBuy;
+            }
+
+            document.getElementById("totalProfit").textContent = profit.toFixed(2);
+        }
+    </script>
+</body>
+</html>

@@ -3,29 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>虛擬貨幣即時價格與交易紀錄</title>
+    <title>虛擬貨幣即時價格</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        h2 { color: #333; }
-        .real-time-price, .transaction-records { margin-top: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #f4f4f4; }
-        .form-group { margin-bottom: 10px; }
-        .profit { font-size: 1.2em; font-weight: bold; margin-top: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .price {
+            font-size: 2rem;
+            margin: 20px;
+        }
+        .price span {
+            font-weight: bold;
+            color: #4caf50;
+        }
+        #btcPrice, #ethPrice {
+            font-size: 1.8rem;
+            color: #555;
+        }
+        .footer {
+            font-size: 1rem;
+            margin-top: 30px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>虛擬貨幣即時價格與交易紀錄</h2>
 
-        <!-- 即時價格顯示區域 -->
-        <div class="real-time-price">
-            <h3>即時價格</h3>
-            <p>BTC/USDT 即時價格: <span id="btcPrice">載入中...</span></p>
-            <p>ETH/USDT 即時價格: <span id="ethPrice">載入中...</span></p>
+    <div class="container">
+        <h1>即時虛擬貨幣價格</h1>
+        <div class="price">
+            <h2>比特幣 (BTC) 價格:</h2>
+            <p id="btcPrice">載入中...</p>
         </div>
+        <div class="price">
+            <h2>以太坊 (ETH) 價格:</h2>
+            <p id="ethPrice">載入中...</p>
+        </div>
+        <div class="footer">
+            <p>資料來源：CoinGecko API</p>
+        </div>
+    </div>
+
+    <script>
+        // 函數：從 CoinGecko API 獲取價格並更新頁面
+        async function fetchPriceFromCoinGecko(coinId, elementId) {
+            const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data); // 輸出 API 回應資料結構
+                const price = data[coinId].usd; // 取得 USD 價格
+                document.getElementById(elementId).textContent = `$${price} USD`; // 更新頁面上的價格
+            } catch (error) {
+                console.error('無法取得即時價格:', error);
+                document.getElementById(elementId).textContent = '無法取得價格'; // 錯誤處理
+            }
+        }
+
+        // 當頁面載入完成後，獲取比特幣和以太坊的即時價格
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchPriceFromCoinGecko("bitcoin", "btcPrice");  // 比特幣
+            fetchPriceFromCoinGecko("ethereum", "ethPrice");  // 以太坊
+        });
+
+        // 每 10 秒更新一次價格
+        setInterval(() => {
+            fetchPriceFromCoinGecko("bitcoin", "btcPrice");  // 更新比特幣價格
+            fetchPriceFromCoinGecko("ethereum", "ethPrice");  // 更新以太坊價格
+        }, 10000);
+    </script>
 
         <!-- 交易紀錄顯示區域 -->
         <div class="transaction-records">

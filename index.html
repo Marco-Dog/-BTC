@@ -85,6 +85,12 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
+                console.log("API 回應:", data);  // 打印 API 回應，幫助排查問題
+
+                if (!data[coinId]) {
+                    throw new Error(`無法找到 ${coinId} 的價格資料`);
+                }
+
                 const price = data[coinId].usd; // 取得 USD 價格
 
                 // 更新頁面顯示
@@ -101,9 +107,10 @@
                     lastPriceETH = price;
                 }
             } catch (error) {
-                console.error('無法取得即時價格:', error);
-
-                // 如果價格無法取得，顯示上次成功的價格
+                console.error('錯誤:', error);
+                // 在網頁上顯示錯誤訊息
+                document.getElementById(elementId).textContent = '無法取得價格';
+                document.getElementById(profitElementId).textContent = '無法計算獲利';
                 if (coinId === "bitcoin" && lastPriceBTC !== 0) {
                     document.getElementById(elementId).textContent = `$${lastPriceBTC} USD (從上次獲取)`;
                     const profit = (lastPriceBTC - purchasePrice) * amount;
@@ -112,9 +119,6 @@
                     document.getElementById(elementId).textContent = `$${lastPriceETH} USD (從上次獲取)`;
                     const profit = (lastPriceETH - purchasePrice) * amount;
                     document.getElementById(profitElementId).textContent = `持倉獲利: $${profit.toFixed(2)} USD`;
-                } else {
-                    document.getElementById(elementId).textContent = '無法取得價格';
-                    document.getElementById(profitElementId).textContent = '無法計算獲利';
                 }
             }
         }

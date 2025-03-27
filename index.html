@@ -77,6 +77,7 @@
                     <th>類型</th>
                     <th>價格</th>
                     <th>數量</th>
+                    <th>手續費</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -130,41 +131,49 @@
             let totalReturn = 0;
 
             transactions.forEach(transaction => {
+                let transactionFee = 0;
+                if (transaction.type === 'buy') {
+                    transactionFee = (transaction.price * transaction.amount) * 0.001; // 0.1% 手續費
+                } else if (transaction.type === 'sell') {
+                    transactionFee = (transaction.price * transaction.amount) * 0.002; // 0.2% 手續費
+                }
+
+                // 計算每筆交易的損益
                 if (transaction.coin === 'BTC') {
                     if (transaction.type === 'buy') {
-                        totalInvested += transaction.price * transaction.amount;
+                        totalInvested += (transaction.price * transaction.amount) + transactionFee;
                     } else {
-                        totalReturn += (btcPrice - transaction.price) * transaction.amount;
+                        totalReturn += ((btcPrice - transaction.price) * transaction.amount) - transactionFee;
                     }
-                    btcProfit += (btcPrice - transaction.price) * transaction.amount;
+                    btcProfit += ((btcPrice - transaction.price) * transaction.amount) - transactionFee;
                 } else if (transaction.coin === 'ADA') {
                     if (transaction.type === 'buy') {
-                        totalInvested += transaction.price * transaction.amount;
+                        totalInvested += (transaction.price * transaction.amount) + transactionFee;
                     } else {
-                        totalReturn += (adaPrice - transaction.price) * transaction.amount;
+                        totalReturn += ((adaPrice - transaction.price) * transaction.amount) - transactionFee;
                     }
-                    adaProfit += (adaPrice - transaction.price) * transaction.amount;
+                    adaProfit += ((adaPrice - transaction.price) * transaction.amount) - transactionFee;
                 } else if (transaction.coin === 'DOGE') {
                     if (transaction.type === 'buy') {
-                        totalInvested += transaction.price * transaction.amount;
+                        totalInvested += (transaction.price * transaction.amount) + transactionFee;
                     } else {
-                        totalReturn += (dogePrice - transaction.price) * transaction.amount;
+                        totalReturn += ((dogePrice - transaction.price) * transaction.amount) - transactionFee;
                     }
-                    dogeProfit += (dogePrice - transaction.price) * transaction.amount;
+                    dogeProfit += ((dogePrice - transaction.price) * transaction.amount) - transactionFee;
                 } else if (transaction.coin === 'SHIB') {
                     if (transaction.type === 'buy') {
-                        totalInvested += transaction.price * transaction.amount;
+                        totalInvested += (transaction.price * transaction.amount) + transactionFee;
                     } else {
-                        totalReturn += (shibPrice - transaction.price) * transaction.amount;
+                        totalReturn += ((shibPrice - transaction.price) * transaction.amount) - transactionFee;
                     }
-                    shibProfit += (shibPrice - transaction.price) * transaction.amount;
+                    shibProfit += ((shibPrice - transaction.price) * transaction.amount) - transactionFee;
                 } else if (transaction.coin === 'ETH') {
                     if (transaction.type === 'buy') {
-                        totalInvested += transaction.price * transaction.amount;
+                        totalInvested += (transaction.price * transaction.amount) + transactionFee;
                     } else {
-                        totalReturn += (ethPrice - transaction.price) * transaction.amount;
+                        totalReturn += ((ethPrice - transaction.price) * transaction.amount) - transactionFee;
                     }
-                    ethProfit += (ethPrice - transaction.price) * transaction.amount;
+                    ethProfit += ((ethPrice - transaction.price) * transaction.amount) - transactionFee;
                 }
             });
 
@@ -187,54 +196,46 @@
 
         // 新增交易紀錄
         function addTransaction() {
-            const date = document.getElementById("date").value;
-            const coin = document.getElementById("coin").value;
-            const type = document.getElementById("type").value;
-            const price = parseFloat(document.getElementById("price").value);
-            const amount = parseFloat(document.getElementById("amount").value);
+            const date = document.getElementById('date').value;
+            const coin = document.getElementById('coin').value;
+            const type = document.getElementById('type').value;
+            const price = parseFloat(document.getElementById('price').value);
+            const amount = parseFloat(document.getElementById('amount').value);
 
-            if (!date || !coin || isNaN(price) || isNaN(amount)) {
-                alert("請填寫完整資訊");
-                return;
-            }
-
+            // 將交易資料添加到交易紀錄中
             transactions.push({ date, coin, type, price, amount });
-            saveTransactions();
-            loadTransactions();
+
+            // 更新表格顯示
+            updateTransactionTable();
+            // 更新獲利顯示
+            updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth);
         }
 
-        // 儲存交易紀錄到 localStorage
-        function saveTransactions() {
-            localStorage.setItem("transactions", JSON.stringify(transactions));
-        }
+        // 更新交易紀錄表格
+        function updateTransactionTable() {
+            const tableBody = document.getElementById('transactionTable');
+            tableBody.innerHTML = '';
 
-        // 載入交易紀錄
-        function loadTransactions() {
-            const storedTransactions = JSON.parse(localStorage.getItem("transactions")) || [];
-            transactions = storedTransactions;
-            const tableBody = document.getElementById("transactionTable");
-            tableBody.innerHTML = "";
-
-            transactions.forEach((t, index) => {
-                const row = `<tr>
-                    <td>${t.date}</td>
-                    <td>${t.coin}</td>
-                    <td>${t.type === 'buy' ? '買入' : '賣出'}</td>
-                    <td>${t.price}</td>
-                    <td>${t.amount}</td>
-                    <td><button onclick="deleteTransaction(${index})">刪除</button></td>
-                </tr>`;
-                tableBody.innerHTML += row;
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.date}</td>
+                    <td>${transaction.coin}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.price}</td>
+                    <td>${transaction.amount}</td>
+                    <td>${(transaction.price * transaction.amount * (transaction.type === 'buy' ? 0.001 : 0.002)).toFixed(2)}</td>
+                    <td><button onclick="deleteTransaction(${transactions.indexOf(transaction)})">刪除</button></td>
+                `;
+                tableBody.appendChild(row);
             });
-
-            updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth); // 更新獲利
         }
 
         // 刪除交易紀錄
         function deleteTransaction(index) {
             transactions.splice(index, 1);
-            saveTransactions();
-            loadTransactions();
+            updateTransactionTable();
+            updateProfits(previousPrices.btc, previousPrices.ada, previousPrices.doge, previousPrices.shib, previousPrices.eth);
         }
 
         // 顯示頁籤
@@ -242,16 +243,7 @@
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.style.display = 'none');
             document.getElementById(tabName).style.display = 'block';
-
-            // 更新頁籤按鈕樣式
-            const buttons = document.querySelectorAll('.tabs button');
-            buttons.forEach(button => button.classList.remove('active'));
-            document.getElementById(tabName + 'Btn').classList.add('active');
         }
-
-        // 頁面加載時載入交易紀錄
-        document.addEventListener("DOMContentLoaded", loadTransactions);
     </script>
-
 </body>
 </html>

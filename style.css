@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.price {
+    font-size: 2rem;
+    margin: 20px;
+}
+
+.price span {
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.price-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.price-item {
+    margin: 10px;
+    font-size: 1.5rem;
+}
+
+.record-form input, .record-form select, .record-form button {
+    margin: 10px;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #4caf50;
+    color: white;
+}
+
+.footer {
+    font-size: 1rem;
+    margin-top: 30px;
+    color: #777;
+}

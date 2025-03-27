@@ -1,19 +1,23 @@
 body {
     font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f6;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 80%;
+    margin: 50px auto;
+    background-color: white;
     padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h3 {
-    text-align: center;
-    margin-bottom: 20px;
+h1 {
+    font-size: 2.5rem;
+    color: #333;
 }
 
 .tabs {
@@ -24,79 +28,45 @@ h1, h3 {
 
 .tabs button {
     padding: 10px 20px;
-    margin: 0 10px;
-    border: none;
-    background-color: #007BFF;
-    color: white;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 0 5px;
 }
 
 .tabs button.active {
-    background-color: #0056b3;
+    background-color: #45a049;
 }
 
 .tab-content {
     display: none;
 }
 
-.price-container, .profit-item {
+.price-container {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-.profit-item {
-    font-size: 18px;
+.price-item, .profit-item {
+    margin: 10px;
+    font-size: 1.5rem;
 }
 
-.total-profit {
-    font-size: 20px;
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-.record-form {
-    background-color: #fff;
-    padding: 20px;
-    margin-top: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.record-form label {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.record-form input, .record-form select {
-    width: 100%;
+.record-form input, .record-form select, .record-form button {
+    margin: 10px;
     padding: 8px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.record-form button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.record-form button:hover {
-    background-color: #0056b3;
+    font-size: 1rem;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 40px;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
+    margin-top: 20px;
 }
 
 table, th, td {
@@ -108,15 +78,20 @@ th, td {
     text-align: center;
 }
 
-button {
-    padding: 5px 10px;
-    background-color: red;
+th {
+    background-color: #4caf50;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-button:hover {
-    background-color: darkred;
+.footer {
+    font-size: 1rem;
+    margin-top: 30px;
+    color: #777;
 }
+
+.total-profit {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+ㄌ

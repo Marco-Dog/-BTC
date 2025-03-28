@@ -1,32 +1,58 @@
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwaAWEFQbS127UQbM96ZCioC7pRDbx9swiqdDzCz_irCaq5paa5z-EuR5YZ1gkx882L/exec'; // 您提供的 Google Sheets API URL
+const API_URL = "https://script.google.com/macros/s/AKfycbwaAWEFQbS127UQbM96ZCioC7pRDbx9swiqdDzCz_irCaq5paa5z-EuR5YZ1gkx882L/exec";
 
-// 同步交易資料至 Google Sheets
-async function syncWithGoogleSheets() {
-  const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-  
-  // 轉換資料格式，以符合 Google Sheets 的要求
-  const data = transactions.map(t => [
-    t.date, t.currency, t.action, t.price, t.quantity, t.fee, t.note
-  ]);
+document.getElementById("transactionForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const date = document.getElementById("date").value;
+    const crypto = document.getElementById("crypto").value;
+    const type = document.getElementById("type").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const quantity = parseFloat(document.getElementById("quantity").value);
+    const note = document.getElementById("note").value;
+    const feeRate = type === "buy" ? 0.001 : 0.002;
+    const fee = price * quantity * feeRate;
+    
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ date, crypto, type, price, quantity, fee, note })
+    }).then(response => response.json())
+      .then(data => {
+          alert("交易已儲存");
+          loadTransactions();
+      });
+});
 
-  // 傳送的參數
-  const params = new URLSearchParams({
-    action: 'update',
-    data: JSON.stringify(data)
-  });
-
-  // 發送請求
-  try {
-    const response = await fetch(`${SHEET_URL}?${params.toString()}`, { method: 'GET' });
-    const result = await response.json();
-    console.log('Google Sheets Sync Result:', result);
-  } catch (error) {
-    console.error('Error syncing with Google Sheets:', error);
-  }
+function loadTransactions() {
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+            const transactionTableBody = document.getElementById("transactionTableBody");
+            transactionTableBody.innerHTML = "";
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.date}</td>
+                    <td>${row.crypto}</td>
+                    <td>${row.type}</td>
+                    <td>${row.price}</td>
+                    <td>${row.quantity}</td>
+                    <td>${row.fee}</td>
+                    <td>${row.note}</td>
+                    <td><button onclick="deleteTransaction('${row.id}')">刪除</button></td>
+                `;
+                transactionTableBody.appendChild(tr);
+            });
+        });
 }
 
-// 同步功能自動執行（例如每次提交或更新時）
-document.getElementById('transaction-form').addEventListener('submit', function(event) {
-  event.preventDefault();
-  syncWithGoogleSheets();  // 每次新增交易紀錄後同步
-});
+function deleteTransaction(id) {
+    fetch(API_URL, {
+        method: "DELETE",
+        body: JSON.stringify({ id })
+    }).then(response => response.json())
+      .then(data => {
+          alert("交易已刪除");
+          loadTransactions();
+      });
+}
+
+loadTransactions();

@@ -1,87 +1,71 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>交易紀錄與即時報價</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密貨幣追蹤</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>即時報價</h1>
-  <div class="price-box" id="BTC-price-box">
-    <div class="currency">BTC</div>
-    <div id="BTC-price" class="price">0 TWD</div>
-    <div class="position">持倉量: <span id="BTC-position">0</span></div>
-    <div class="profit">獲利: <span id="BTC-profit">0 TWD</span></div>
-    <div class="return">報酬率: <span id="BTC-return">0%</span></div>
-  </div>
-  <div class="price-box" id="ETH-price-box">
-    <div class="currency">ETH</div>
-    <div id="ETH-price" class="price">0 TWD</div>
-    <div class="position">持倉量: <span id="ETH-position">0</span></div>
-    <div class="profit">獲利: <span id="ETH-profit">0 TWD</span></div>
-    <div class="return">報酬率: <span id="ETH-return">0%</span></div>
-  </div>
-  <div class="price-box" id="ADA-price-box">
-    <div class="currency">ADA</div>
-    <div id="ADA-price" class="price">0 TWD</div>
-    <div class="position">持倉量: <span id="ADA-position">0</span></div>
-    <div class="profit">獲利: <span id="ADA-profit">0 TWD</span></div>
-    <div class="return">報酬率: <span id="ADA-return">0%</span></div>
-  </div>
-  <div class="price-box" id="DOGE-price-box">
-    <div class="currency">DOGE</div>
-    <div id="DOGE-price" class="price">0 TWD</div>
-    <div class="position">持倉量: <span id="DOGE-position">0</span></div>
-    <div class="profit">獲利: <span id="DOGE-profit">0 TWD</span></div>
-    <div class="return">報酬率: <span id="DOGE-return">0%</span></div>
-  </div>
-  <div class="price-box" id="SHIB-price-box">
-    <div class="currency">SHIB</div>
-    <div id="SHIB-price" class="price">0 TWD</div>
-    <div class="position">持倉量: <span id="SHIB-position">0</span></div>
-    <div class="profit">獲利: <span id="SHIB-profit">0 TWD</span></div>
-    <div class="return">報酬率: <span id="SHIB-return">0%</span></div>
-  </div>
-
-  <h2>新增交易紀錄</h2>
-  <form id="transaction-form">
-    <label for="transaction-date">日期:</label>
-    <input type="date" id="transaction-date" required><br>
-    <label for="transaction-currency">幣別:</label>
-    <input type="text" id="transaction-currency" required><br>
-    <label for="transaction-type">買入/賣出:</label>
-    <select id="transaction-type">
-      <option value="Buy">買入</option>
-      <option value="Sell">賣出</option>
-    </select><br>
-    <label for="transaction-price">價格:</label>
-    <input type="number" id="transaction-price" required><br>
-    <label for="transaction-quantity">數量:</label>
-    <input type="number" id="transaction-quantity" required><br>
-    <label for="transaction-note">備註:</label>
-    <textarea id="transaction-note"></textarea><br>
-    <button type="submit">儲存交易</button>
-  </form>
-
-  <h2>交易紀錄</h2>
-  <table id="transaction-list">
-    <thead>
-      <tr>
-        <th>日期</th>
-        <th>幣別</th>
-        <th>類型</th>
-        <th>價格</th>
-        <th>數量</th>
-        <th>手續費</th>
-        <th>備註</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <script src="app.js"></script>
-  <script src="googleSheet.js"></script>
+    <div class="container">
+        <ul class="tabs">
+            <li data-tab="prices" class="active">即時報價</li>
+            <li data-tab="transactions">交易紀錄</li>
+        </ul>
+        <div id="prices" class="tab-content active">
+            <table>
+                <thead>
+                    <tr>
+                        <th>幣別</th>
+                        <th>即時報價 (NT$)</th>
+                        <th>總持倉量</th>
+                        <th>持倉成本</th>
+                        <th>持倉獲利</th>
+                        <th>持倉報酬率</th>
+                    </tr>
+                </thead>
+                <tbody id="priceTableBody">
+                </tbody>
+            </table>
+        </div>
+        <div id="transactions" class="tab-content">
+            <form id="transactionForm">
+                <input type="date" id="date" required>
+                <select id="crypto" required>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="ADA">ADA</option>
+                    <option value="DOGE">DOGE</option>
+                    <option value="SHIB">SHIB</option>
+                </select>
+                <select id="type" required>
+                    <option value="buy">買入</option>
+                    <option value="sell">賣出</option>
+                </select>
+                <input type="number" id="price" placeholder="價格" required>
+                <input type="number" id="quantity" placeholder="數量" required>
+                <input type="text" id="note" placeholder="備註">
+                <button type="submit">提交</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>幣別</th>
+                        <th>買入/賣出</th>
+                        <th>價格</th>
+                        <th>數量</th>
+                        <th>手續費</th>
+                        <th>備註</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script src="googleSheet.js"></script>
 </body>
 </html>

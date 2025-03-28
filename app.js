@@ -87,9 +87,9 @@ function renderTransactions() {
             <td>${tx.date}</td>
             <td>${tx.currency}</td>
             <td>${tx.type}</td>
-            <td>${tx.price.toFixed(2)}</td>
+            <td>${tx.price.toFixed(6)}</td>
             <td>${tx.quantity}</td>
-            <td>${tx.fee.toFixed(2)}</td>
+            <td>${tx.fee.toFixed(3)}</td>
             <td>${tx.note}</td>
             <td><button onclick="deleteRow(${index})">刪除</button></td>
         </tr>`;

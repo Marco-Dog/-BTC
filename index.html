@@ -8,52 +8,80 @@
 </head>
 <body>
   <h1>即時報價</h1>
-  <div class="price-box">
+  <div class="price-box" id="BTC-price-box">
     <div class="currency">BTC</div>
-    <div id="BTC-price" class="price">￥0</div>
+    <div id="BTC-price" class="price">0 TWD</div>
+    <div class="position">持倉量: <span id="BTC-position">0</span></div>
+    <div class="profit">獲利: <span id="BTC-profit">0 TWD</span></div>
+    <div class="return">報酬率: <span id="BTC-return">0%</span></div>
   </div>
-  <div class="price-box">
+  <div class="price-box" id="ETH-price-box">
     <div class="currency">ETH</div>
-    <div id="ETH-price" class="price">￥0</div>
+    <div id="ETH-price" class="price">0 TWD</div>
+    <div class="position">持倉量: <span id="ETH-position">0</span></div>
+    <div class="profit">獲利: <span id="ETH-profit">0 TWD</span></div>
+    <div class="return">報酬率: <span id="ETH-return">0%</span></div>
   </div>
-  <div class="price-box">
+  <div class="price-box" id="ADA-price-box">
     <div class="currency">ADA</div>
-    <div id="ADA-price" class="price">￥0</div>
+    <div id="ADA-price" class="price">0 TWD</div>
+    <div class="position">持倉量: <span id="ADA-position">0</span></div>
+    <div class="profit">獲利: <span id="ADA-profit">0 TWD</span></div>
+    <div class="return">報酬率: <span id="ADA-return">0%</span></div>
   </div>
-  <div class="price-box">
+  <div class="price-box" id="DOGE-price-box">
     <div class="currency">DOGE</div>
-    <div id="DOGE-price" class="price">￥0</div>
+    <div id="DOGE-price" class="price">0 TWD</div>
+    <div class="position">持倉量: <span id="DOGE-position">0</span></div>
+    <div class="profit">獲利: <span id="DOGE-profit">0 TWD</span></div>
+    <div class="return">報酬率: <span id="DOGE-return">0%</span></div>
   </div>
-  <div class="price-box">
+  <div class="price-box" id="SHIB-price-box">
     <div class="currency">SHIB</div>
-    <div id="SHIB-price" class="price">￥0</div>
+    <div id="SHIB-price" class="price">0 TWD</div>
+    <div class="position">持倉量: <span id="SHIB-position">0</span></div>
+    <div class="profit">獲利: <span id="SHIB-profit">0 TWD</span></div>
+    <div class="return">報酬率: <span id="SHIB-return">0%</span></div>
   </div>
 
   <h2>新增交易紀錄</h2>
-  <form id="transaction-form" class="transaction-form">
-    <label for="date">日期:</label>
-    <input type="date" id="date" required><br>
-    <label for="currency">幣別:</label>
-    <input type="text" id="currency" required><br>
-    <label for="type">買入/賣出:</label>
-    <select id="type">
-      <option value="buy">買入</option>
-      <option value="sell">賣出</option>
+  <form id="transaction-form">
+    <label for="transaction-date">日期:</label>
+    <input type="date" id="transaction-date" required><br>
+    <label for="transaction-currency">幣別:</label>
+    <input type="text" id="transaction-currency" required><br>
+    <label for="transaction-type">買入/賣出:</label>
+    <select id="transaction-type">
+      <option value="Buy">買入</option>
+      <option value="Sell">賣出</option>
     </select><br>
-    <label for="price">價格:</label>
-    <input type="number" id="price" required><br>
-    <label for="quantity">數量:</label>
-    <input type="number" id="quantity" required><br>
-    <label for="fee">手續費:</label>
-    <input type="number" id="fee" disabled><br>
-    <label for="note">備註:</label>
-    <textarea id="note"></textarea><br>
-    <button type="button" onclick="saveTransaction()">儲存交易</button>
+    <label for="transaction-price">價格:</label>
+    <input type="number" id="transaction-price" required><br>
+    <label for="transaction-quantity">數量:</label>
+    <input type="number" id="transaction-quantity" required><br>
+    <label for="transaction-note">備註:</label>
+    <textarea id="transaction-note"></textarea><br>
+    <button type="submit">儲存交易</button>
   </form>
 
   <h2>交易紀錄</h2>
-  <div id="transaction-list"></div>
+  <table id="transaction-list">
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th>幣別</th>
+        <th>類型</th>
+        <th>價格</th>
+        <th>數量</th>
+        <th>手續費</th>
+        <th>備註</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script src="app.js"></script>
+  <script src="googleSheet.js"></script>
 </body>
 </html>

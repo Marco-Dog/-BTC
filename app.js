@@ -45,8 +45,8 @@ function updatePriceTable() {
         const row = `<tr>
             <td>${coin}</td>
             <td>NT$ ${coin === 'SHIB' ? price.toFixed(10) : price.toFixed(2)}</td>
-            <td>${data.quantity.toFixed(4)}</td>
-            <td>NT$ ${data.cost.toFixed(2)}</td>
+            <td>${data.quantity.toFixed(6)}</td>
+            <td>NT$ ${data.cost.toFixed(3)}</td>
             <td class="profit">NT$ ${data.profit.toFixed(2)}</td>
             <td class="profit">${data.returns.toFixed(2)}%</td>
         </tr>`;
@@ -88,7 +88,7 @@ function renderTransactions() {
             <td>${tx.currency}</td>
             <td>${tx.type}</td>
             <td>${tx.price.toFixed(6)}</td>
-            <td>${tx.quantity}</td>
+            <td>${tx.quantity.toFixed(6)}</td>
             <td>${tx.fee.toFixed(3)}</td>
             <td>${tx.note}</td>
             <td><button onclick="deleteRow(${index})">刪除</button></td>

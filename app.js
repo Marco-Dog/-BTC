@@ -26,7 +26,7 @@ function fetchPrices() {
                 ETH: data.ethereum.twd,
                 ADA: data.cardano.twd,
                 DOGE: data.dogecoin.twd,
-                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(10))
+                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8))
             };
             updatePriceTable();
         })
@@ -44,7 +44,7 @@ function updatePriceTable() {
         const data = holdings[coin] || { quantity: 0, cost: 0, profit: 0, returns: 0 };
         const row = `<tr>
             <td>${coin}</td>
-            <td>NT$ ${coin === 'DOGE' ? price.toFixed(10) : price.toFixed(2)}</td>
+            <td>NT$ ${coin === 'SHIB' ? price.toFixed(10) : price.toFixed(2)}</td>
             <td>${data.quantity.toFixed(4)}</td>
             <td>NT$ ${data.cost.toFixed(2)}</td>
             <td class="profit">NT$ ${data.profit.toFixed(2)}</td>
@@ -63,10 +63,11 @@ function addTransaction(event) {
     const quantity = parseFloat(document.getElementById("quantity").value);
     const note = document.getElementById("note").value;
     
-    if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity < 1e-10) {
-        alert("請輸入有效的價格和數量！");
-        return;
-    }
+   if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+    alert("請輸入有效的價格和數量！");
+    return;
+}
+
     
     const fee = type === "buy" ? price * quantity * 0.001 : price * quantity * 0.002;
     

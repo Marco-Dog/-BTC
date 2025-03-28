@@ -7,21 +7,12 @@ async function updateQuotes() {
     const response = await fetch(COINGECKO_API_URL);
     const data = await response.json();
 
-    // 模擬的持倉量和獲利資料，您可以根據實際情況進行動態更新
-    const portfolio = {
-      BTC: { position: 0.5, profit: 5000, buyPrice: 48000 },
-      ETH: { position: 1, profit: -100, buyPrice: 3200 },
-      ADA: { position: 100, profit: 250, buyPrice: 2.3 },
-      DOGE: { position: 10000, profit: -50, buyPrice: 0.08 },
-      SHIB: { position: 1000000, profit: 100, buyPrice: 0.000008 },
-    };
-
-    // 更新每個幣別的報價
-    updateCurrencyData("BTC", data.bitcoin.twd, portfolio.BTC);
-    updateCurrencyData("ETH", data.ethereum.twd, portfolio.ETH);
-    updateCurrencyData("ADA", data.cardano.twd, portfolio.ADA);
-    updateCurrencyData("DOGE", data.dogecoin.twd, portfolio.DOGE);
-    updateCurrencyData("SHIB", data["shiba-inu"].twd, portfolio.SHIB);
+// 更新每個幣別的報價
+  updateCurrencyData("BTC", data.bitcoin.twd, portfolio.BTC);
+  updateCurrencyData("ETH", data.ethereum.twd, portfolio.ETH);
+  updateCurrencyData("ADA", data.cardano.twd, portfolio.ADA);
+  updateCurrencyData("DOGE", data.dogecoin.twd, portfolio.DOGE);
+  updateCurrencyData("SHIB", data["shiba-inu"].twd, portfolio.SHIB);
 
   } catch (error) {
     console.error("無法取得即時報價:", error);

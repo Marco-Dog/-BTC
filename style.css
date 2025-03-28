@@ -1,35 +1,55 @@
+/* 維持簡潔和現代感的設計 */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #4CAF50;
+}
+
 /* 設定即時報價顯示樣式 */
 .price-box {
-  display: flex;
-  justify-content: space-between;
-  height: 50px;  /* 統一高度 */
-  align-items: center;  /* 垂直置中 */
-  font-size: 18px;  /* 統一字體大小 */
-  padding: 10px;
-  background-color: #f7f7f7;
-  border-radius: 5px;
-  margin: 10px 0;
+  display: inline-block;
+  width: 18%;
+  padding: 20px;
+  margin: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .price-box .currency {
-  width: 20%;
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
 
 .price-box .price {
-  width: 30%;
-  text-align: center;
-  font-weight: bold;
+  font-size: 20px;
+  color: #00796b;
 }
 
-/* 設定交易紀錄顯示樣式 */
+/* 交易紀錄列表 */
 .transaction-item {
   display: flex;
   justify-content: space-between;
-  margin: 5px 0;
-  padding: 8px;
-  background-color: #eaeaea;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
   border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-item span {
+  width: 12%;
+  text-align: center;
 }
 
 .transaction-item button {
@@ -39,8 +59,42 @@
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
+  font-size: 14px;
 }
 
 .transaction-item button:hover {
-  background-color: #ff1a1a;
+  background-color: #e63946;
+}
+
+.transaction-form {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 500px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-form input, .transaction-form select, .transaction-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.transaction-form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.transaction-form button:hover {
+  background-color: #45a049;
 }

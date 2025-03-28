@@ -29,11 +29,8 @@
     <div id="SHIB-price" class="price">￥0</div>
   </div>
 
-  <h1>交易紀錄</h1>
-  <div id="transaction-list"></div>
-
   <h2>新增交易紀錄</h2>
-  <form id="transaction-form">
+  <form id="transaction-form" class="transaction-form">
     <label for="date">日期:</label>
     <input type="date" id="date" required><br>
     <label for="currency">幣別:</label>
@@ -48,11 +45,14 @@
     <label for="quantity">數量:</label>
     <input type="number" id="quantity" required><br>
     <label for="fee">手續費:</label>
-    <input type="number" id="fee" required><br>
+    <input type="number" id="fee" disabled><br>
     <label for="note">備註:</label>
     <textarea id="note"></textarea><br>
-    <button type="submit">儲存交易</button>
+    <button type="button" onclick="saveTransaction()">儲存交易</button>
   </form>
+
+  <h2>交易紀錄</h2>
+  <div id="transaction-list"></div>
 
   <script src="app.js"></script>
 </body>

@@ -1,90 +1,59 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
 }
-
 .container {
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-
-h1 {
-  text-align: center;
-  color: #333;
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
 }
-
-h2 {
-  color: #333;
+.tabs li {
+    list-style: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    background: #ddd;
+    margin-right: 5px;
 }
-
+.tabs li.active {
+    background: #007bff;
+    color: white;
+}
 .tab-content {
-  margin: 20px 0;
+    display: none;
+    padding: 20px 0;
 }
-
-#prices {
-  display: flex;
-  justify-content: space-between;
+.tab-content.active {
+    display: block;
 }
-
-.price {
-  font-size: 18px;
-  text-align: center;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
-
-.green {
-  color: green;
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
 }
-
+th {
+    background: #007bff;
+    color: white;
+}
 .red {
-  color: red;
+    color: red;
 }
-
-.arrow-up::after {
-  content: "↑";
-}
-
-.arrow-down::after {
-  content: "↓";
-}
-
-form input, form select {
-  padding: 5px;
-  margin: 10px 0;
-}
-
-button {
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-#transaction-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-#transaction-table th, #transaction-table td {
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-#transaction-table th {
-  background-color: #f2f2f2;
-}
-
-#transaction-table td button {
-  color: red;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+.green {
+    color: green;
 }

@@ -1,43 +1,82 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title>虛擬貨幣交易紀錄</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>虛擬貨幣交易紀錄</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
     <h1>虛擬貨幣交易紀錄</h1>
+    
+    <!-- 即時報價 -->
+    <div id="pricing" class="tab-content">
+      <h2>即時報價</h2>
+      <div id="prices">
+        <!-- 報價內容會動態加載 -->
+      </div>
+    </div>
 
-    <form id="record-form">
-        <label>日期：<input type="date" id="date" required></label>
-        <label>交易類型：
-            <select id="type" required>
-                <option value="buy">買入</option>
-                <option value="sell">賣出</option>
-            </select>
-        </label>
-        <label>金額：<input type="number" step="0.0001" id="amount" required></label>
-        <label>價格：<input type="number" step="0.01" id="price" required></label>
-        <label>備註：<input type="text" id="note"></label>
+    <!-- 交易紀錄 -->
+    <div id="transactions" class="tab-content">
+      <h2>交易紀錄</h2>
+      <form id="transaction-form">
+        <label for="date">日期：</label>
+        <input type="date" id="date" required><br>
+        
+        <label for="currency">幣別：</label>
+        <select id="currency" required>
+          <option value="bitcoin">Bitcoin (BTC)</option>
+          <option value="ethereum">Ethereum (ETH)</option>
+          <option value="litecoin">Litecoin (LTC)</option>
+          <option value="ripple">Ripple (XRP)</option>
+          <option value="cardano">Cardano (ADA)</option>
+        </select><br>
+
+        <label for="action">買入/賣出：</label>
+        <select id="action" required>
+          <option value="buy">買入</option>
+          <option value="sell">賣出</option>
+        </select><br>
+
+        <label for="price">價格：</label>
+        <input type="number" id="price" step="0.01" required><br>
+
+        <label for="quantity">數量：</label>
+        <input type="number" id="quantity" step="0.001" required><br>
+
+        <label for="fee">手續費：</label>
+        <input type="number" id="fee" step="0.01" required><br>
+
+        <label for="note">備註：</label>
+        <input type="text" id="note"><br>
+
         <button type="submit">新增紀錄</button>
-    </form>
+      </form>
 
-    <h2>交易紀錄 (LocalStorage)</h2>
-    <table id="local-table">
+      <h3>交易紀錄</h3>
+      <table id="transaction-table">
         <thead>
-            <tr>
-                <th>日期</th>
-                <th>類型</th>
-                <th>金額</th>
-                <th>價格</th>
-                <th>手續費</th>
-                <th>備註</th>
-            </tr>
+          <tr>
+            <th>日期</th>
+            <th>幣別</th>
+            <th>操作</th>
+            <th>價格</th>
+            <th>數量</th>
+            <th>手續費</th>
+            <th>備註</th>
+            <th>刪除</th>
+          </tr>
         </thead>
-        <tbody></tbody>
-    </table>
-
-    <script src="googleSheet.js"></script>
-    <script src="app.js"></script>
+        <tbody>
+          <!-- 交易紀錄內容會動態加載 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script src="googleSheet.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

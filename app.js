@@ -161,3 +161,41 @@ function openTab(event, tabName) {
     });
     event.currentTarget.classList.add("active");
 }
+// 在頁面加載後自動跳到 #prices 頁籤
+window.onload = function() {
+    // 設定當頁面載入時自動跳轉到即時報價頁籤
+    window.location.hash = '#prices';
+
+    // 顯示對應的頁籤內容
+    showTabContent();
+};
+
+// 頁籤點擊處理函數
+document.querySelectorAll('.tab-link').forEach(tab => {
+    tab.addEventListener('click', function(event) {
+        event.preventDefault();
+        const targetTab = this.getAttribute('href');
+        window.location.hash = targetTab;  // 更改 URL hash
+        showTabContent();
+    });
+});
+
+// 根據 URL hash 顯示對應的頁籤內容
+function showTabContent() {
+    const hash = window.location.hash;
+    
+    // 隱藏所有頁籤內容
+    document.querySelectorAll('section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // 顯示當前頁籤
+    const activeTab = document.querySelector(hash);
+    if (activeTab) {
+        activeTab.style.display = 'block';
+    }
+}
+
+// 初始加載顯示對應的頁籤
+showTabContent();
+

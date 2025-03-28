@@ -1,109 +1,59 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>虛擬貨幣交易紀錄</title>
+  <title>交易紀錄與即時報價</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <!-- 標題 -->
-    <h1>虛擬貨幣即時報價與交易紀錄</h1>
-
-    <!-- 即時報價區域 -->
-    <div class="quotes-section">
-      <div class="quote-card">
-        <h3>BTC</h3>
-        <p class="price" id="btc-price">-- TWD</p>
-        <p class="profit" id="btc-profit">-- TWD</p>
-        <p class="return" id="btc-return">-- %</p>
-      </div>
-      <div class="quote-card">
-        <h3>ETH</h3>
-        <p class="price" id="eth-price">-- TWD</p>
-        <p class="profit" id="eth-profit">-- TWD</p>
-        <p class="return" id="eth-return">-- %</p>
-      </div>
-      <div class="quote-card">
-        <h3>ADA</h3>
-        <p class="price" id="ada-price">-- TWD</p>
-        <p class="profit" id="ada-profit">-- TWD</p>
-        <p class="return" id="ada-return">-- %</p>
-      </div>
-      <div class="quote-card">
-        <h3>DOGE</h3>
-        <p class="price" id="doge-price">-- TWD</p>
-        <p class="profit" id="doge-profit">-- TWD</p>
-        <p class="return" id="doge-return">-- %</p>
-      </div>
-      <div class="quote-card">
-        <h3>SHIB</h3>
-        <p class="price" id="shib-price">-- TWD</p>
-        <p class="profit" id="shib-profit">-- TWD</p>
-        <p class="return" id="shib-return">-- %</p>
-      </div>
-    </div>
-
-    <!-- 交易紀錄表單 -->
-    <div class="transaction-form">
-      <h2>輸入交易紀錄</h2>
-      <form id="transaction-form">
-        <label for="transaction-date">日期</label>
-        <input type="date" id="transaction-date" required>
-
-        <label for="transaction-currency">幣別</label>
-        <select id="transaction-currency" required>
-          <option value="BTC">BTC</option>
-          <option value="ETH">ETH</option>
-          <option value="ADA">ADA</option>
-          <option value="DOGE">DOGE</option>
-          <option value="SHIB">SHIB</option>
-        </select>
-
-        <label for="transaction-type">買入/賣出</label>
-        <select id="transaction-type" required>
-          <option value="Buy">買入</option>
-          <option value="Sell">賣出</option>
-        </select>
-
-        <label for="transaction-price">價格 (TWD)</label>
-        <input type="number" id="transaction-price" step="any" required>
-
-        <label for="transaction-quantity">數量</label>
-        <input type="number" id="transaction-quantity" step="any" required>
-
-        <label for="transaction-note">備註</label>
-        <input type="text" id="transaction-note">
-
-        <button type="submit">儲存交易紀錄</button>
-      </form>
-    </div>
-
-    <!-- 交易紀錄顯示區域 (可選) -->
-    <div class="transaction-table">
-      <h2>交易紀錄</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>日期</th>
-            <th>幣別</th>
-            <th>買入/賣出</th>
-            <th>價格 (TWD)</th>
-            <th>數量</th>
-            <th>手續費 (TWD)</th>
-            <th>備註</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody id="transaction-list">
-          <!-- 交易紀錄會顯示在這裡 -->
-        </tbody>
-      </table>
-    </div>
+  <h1>即時報價</h1>
+  <div class="price-box">
+    <div class="currency">BTC</div>
+    <div id="BTC-price" class="price">￥0</div>
+  </div>
+  <div class="price-box">
+    <div class="currency">ETH</div>
+    <div id="ETH-price" class="price">￥0</div>
+  </div>
+  <div class="price-box">
+    <div class="currency">ADA</div>
+    <div id="ADA-price" class="price">￥0</div>
+  </div>
+  <div class="price-box">
+    <div class="currency">DOGE</div>
+    <div id="DOGE-price" class="price">￥0</div>
+  </div>
+  <div class="price-box">
+    <div class="currency">SHIB</div>
+    <div id="SHIB-price" class="price">￥0</div>
   </div>
 
+  <h1>交易紀錄</h1>
+  <div id="transaction-list"></div>
+
+  <h2>新增交易紀錄</h2>
+  <form id="transaction-form">
+    <label for="date">日期:</label>
+    <input type="date" id="date" required><br>
+    <label for="currency">幣別:</label>
+    <input type="text" id="currency" required><br>
+    <label for="type">買入/賣出:</label>
+    <select id="type">
+      <option value="buy">買入</option>
+      <option value="sell">賣出</option>
+    </select><br>
+    <label for="price">價格:</label>
+    <input type="number" id="price" required><br>
+    <label for="quantity">數量:</label>
+    <input type="number" id="quantity" required><br>
+    <label for="fee">手續費:</label>
+    <input type="number" id="fee" required><br>
+    <label for="note">備註:</label>
+    <textarea id="note"></textarea><br>
+    <button type="submit">儲存交易</button>
+  </form>
+
   <script src="app.js"></script>
-  <script src="googleSheet.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin,cardano,shiba-inu&vs_currencies=ntd";
+const COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin,cardano,shiba-inu&vs_currencies=twd";
 
 // 更新即時報價
 async function fetchPricing() {
@@ -6,49 +6,48 @@ async function fetchPricing() {
     const response = await fetch(COINGECKO_API_URL);
     const data = await response.json();
 
-    const prices = document.getElementById('prices');
-    prices.innerHTML = '';
+    // 顯示即時價格、持倉量、損益、報酬率
+    updateQuote("btc", data.bitcoin.twd);
+    updateQuote("eth", data.ethereum.twd);
+    updateQuote("ada", data.cardano.twd);
+    updateQuote("doge", data.dogecoin.twd);
+    updateQuote("shib", data.shiba-inu.twd);
 
-    const currencies = ["bitcoin", "ethereum", "dogecoin", "cardano", "shiba-inu"];
-    currencies.forEach(currency => {
-      const price = data[currency].ntd;
-      const priceElement = document.createElement('div');
-      priceElement.classList.add('price');
-      priceElement.innerHTML = `
-        ${currency.charAt(0).toUpperCase() + currency.slice(1)}: ₣${price}
-        <span class="green arrow-up"></span>`;
-      prices.appendChild(priceElement);
-    });
-
-    // 顯示持倉數量與持倉獲利
-    displayPortfolio(data);
   } catch (error) {
     console.error("Error fetching pricing data:", error);
   }
 }
 
-// 顯示持倉數量與持倉獲利
-function displayPortfolio(prices) {
+// 更新單一幣別報價區域
+function updateQuote(currency, price) {
+  const priceElement = document.getElementById(`${currency}-price`);
+  const positionElement = document.getElementById(`${currency}-position`);
+  const profitElement = document.getElementById(`${currency}-profit`);
+  const returnElement = document.getElementById(`${currency}-return`);
+
+  priceElement.innerText = `$${price}`;
+
+  // 假設從 localStorage 中讀取的持倉數量和購買價格
   const portfolio = JSON.parse(localStorage.getItem('transactions') || '[]');
-  let portfolioValue = 0;
-  let profitLoss = 0;
+  let position = 0;
+  let totalCost = 0;
+  let totalValue = 0;
 
   portfolio.forEach(transaction => {
-    const currentPrice = prices[transaction.currency].ntd;
-    const transactionValue = transaction.quantity * currentPrice;
-    const transactionCost = transaction.price * transaction.quantity + transaction.fee;
-    const transactionProfitLoss = transactionValue - transactionCost;
-
-    portfolioValue += transactionValue;
-    profitLoss += transactionProfitLoss;
+    if (transaction.currency === currency) {
+      position += transaction.quantity;
+      totalValue += transaction.quantity * price;
+      totalCost += (transaction.quantity * transaction.price) + transaction.fee;
+    }
   });
 
-  const portfolioContainer = document.getElementById('portfolio');
-  portfolioContainer.innerHTML = `
-    <h3>持倉狀況</h3>
-    <p>總持倉價值: ₣${portfolioValue.toFixed(2)}</p>
-    <p>持倉獲利: <span class="${profitLoss >= 0 ? 'green' : 'red'}">${profitLoss >= 0 ? '₣' + profitLoss.toFixed(2) + ' ↑' : '₣' + profitLoss.toFixed(2) + ' ↓'}</span></p>
-  `;
+  // 更新持倉量、損益和報酬率
+  positionElement.innerText = position;
+  const profit = totalValue - totalCost;
+  profitElement.innerText = `$${profit.toFixed(2)}`;
+
+  const returnRate = (totalCost === 0) ? 0 : ((profit / totalCost) * 100).toFixed(2);
+  returnElement.innerText = `${returnRate} %`;
 }
 
 // 新增交易紀錄
@@ -106,3 +105,4 @@ function deleteTransaction(index) {
 // 初始載入即時報價和交易紀錄
 fetchPricing();
 updateTransactions();
+

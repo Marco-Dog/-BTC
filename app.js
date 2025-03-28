@@ -1,4 +1,4 @@
-const COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,ripple,cardano&vs_currencies=thb";
+const COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin,cardano,shiba-inu&vs_currencies=ntd";
 
 // 更新即時報價
 async function fetchPricing() {
@@ -9,13 +9,13 @@ async function fetchPricing() {
     const prices = document.getElementById('prices');
     prices.innerHTML = '';
 
-    const currencies = ["bitcoin", "ethereum", "litecoin", "ripple", "cardano"];
+    const currencies = ["bitcoin", "ethereum", "dogecoin", "cardano", "shiba-inu"];
     currencies.forEach(currency => {
-      const price = data[currency].thb;
+      const price = data[currency].ntd;
       const priceElement = document.createElement('div');
       priceElement.classList.add('price');
       priceElement.innerHTML = `
-        ${currency.charAt(0).toUpperCase() + currency.slice(1)}: ฿${price}
+        ${currency.charAt(0).toUpperCase() + currency.slice(1)}: ₣${price}
         <span class="green arrow-up"></span>`;
       prices.appendChild(priceElement);
     });
@@ -34,7 +34,7 @@ function displayPortfolio(prices) {
   let profitLoss = 0;
 
   portfolio.forEach(transaction => {
-    const currentPrice = prices[transaction.currency].thb;
+    const currentPrice = prices[transaction.currency].ntd;
     const transactionValue = transaction.quantity * currentPrice;
     const transactionCost = transaction.price * transaction.quantity + transaction.fee;
     const transactionProfitLoss = transactionValue - transactionCost;
@@ -46,8 +46,8 @@ function displayPortfolio(prices) {
   const portfolioContainer = document.getElementById('portfolio');
   portfolioContainer.innerHTML = `
     <h3>持倉狀況</h3>
-    <p>總持倉價值: ฿${portfolioValue.toFixed(2)}</p>
-    <p>持倉獲利: <span class="${profitLoss >= 0 ? 'green' : 'red'}">${profitLoss >= 0 ? '฿' + profitLoss.toFixed(2) + ' ↑' : '฿' + profitLoss.toFixed(2) + ' ↓'}</span></p>
+    <p>總持倉價值: ₣${portfolioValue.toFixed(2)}</p>
+    <p>持倉獲利: <span class="${profitLoss >= 0 ? 'green' : 'red'}">${profitLoss >= 0 ? '₣' + profitLoss.toFixed(2) + ' ↑' : '₣' + profitLoss.toFixed(2) + ' ↓'}</span></p>
   `;
 }
 
@@ -84,9 +84,9 @@ function updateTransactions() {
       <td>${transaction.date}</td>
       <td>${transaction.currency}</td>
       <td>${transaction.action}</td>
-      <td>฿${transaction.price}</td>
+      <td>₣${transaction.price}</td>
       <td>${transaction.quantity}</td>
-      <td>฿${transaction.fee.toFixed(2)}</td>
+      <td>₣${transaction.fee.toFixed(2)}</td>
       <td>${transaction.note}</td>
       <td><button onclick="deleteTransaction(${index})">刪除</button></td>
     `;

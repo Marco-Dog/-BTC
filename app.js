@@ -1,43 +1,79 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <title>虛擬貨幣交易紀錄</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>虛擬貨幣交易紀錄</h1>
+const COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,ripple,cardano&vs_currencies=usd";
 
-    <form id="record-form">
-        <label>日期：<input type="date" id="date" required></label>
-        <label>交易類型：
-            <select id="type" required>
-                <option value="buy">買入</option>
-                <option value="sell">賣出</option>
-            </select>
-        </label>
-        <label>金額：<input type="number" step="0.0001" id="amount" required></label>
-        <label>價格：<input type="number" step="0.01" id="price" required></label>
-        <label>備註：<input type="text" id="note"></label>
-        <button type="submit">新增紀錄</button>
-    </form>
+// 更新即時報價
+async function fetchPricing() {
+  try {
+    const response = await fetch(COINGECKO_API_URL);
+    const data = await response.json();
 
-    <h2>交易紀錄 (LocalStorage)</h2>
-    <table id="local-table">
-        <thead>
-            <tr>
-                <th>日期</th>
-                <th>類型</th>
-                <th>金額</th>
-                <th>價格</th>
-                <th>手續費</th>
-                <th>備註</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    const prices = document.getElementById('prices');
+    prices.innerHTML = '';
 
-    <script src="googleSheet.js"></script>
-    <script src="app.js"></script>
-</body>
-</html>
+    const currencies = ["bitcoin", "ethereum", "litecoin", "ripple", "cardano"];
+    currencies.forEach(currency => {
+      const price = data[currency].usd;
+      const priceElement = document.createElement('div');
+      priceElement.classList.add('price');
+      priceElement.innerHTML = `
+        ${currency.charAt(0).toUpperCase() + currency.slice(1)}: $${price}
+        <span class="green arrow-up"></span>`;
+      prices.appendChild(priceElement);
+    });
+  } catch (error) {
+    console.error("Error fetching pricing data:", error);
+  }
+}
+
+// 更新交易紀錄
+function updateTransactions() {
+  const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+  const transactionTable = document.getElementById('transaction-table').getElementsByTagName('tbody')[0];
+  transactionTable.innerHTML = '';
+
+  transactions.forEach((transaction, index) => {
+    const row = transactionTable.insertRow();
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.currency}</td>
+      <td>${transaction.action}</td>
+      <td>${transaction.price}</td>
+      <td>${transaction.quantity}</td>
+      <td>${transaction.fee}</td>
+      <td>${transaction.note}</td>
+      <td><button onclick="deleteTransaction(${index})">刪除</button></td>
+    `;
+  });
+}
+
+// 新增交易紀錄
+document.getElementById('transaction-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const date = document.getElementById('date').value;
+  const currency = document.getElementById('currency').value;
+  const action = document.getElementById('action').value;
+  const price = parseFloat(document.getElementById('price').value);
+  const quantity = parseFloat(document.getElementById('quantity').value);
+  const fee = parseFloat(document.getElementById('fee').value);
+  const note = document.getElementById('note').value;
+
+  const transaction = { date, currency, action, price, quantity, fee, note };
+  let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+  transactions.push(transaction);
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+
+  updateTransactions();
+});
+
+// 刪除交易紀錄
+function deleteTransaction(index) {
+  let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+  transactions.splice(index, 1);
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+
+  updateTransactions();
+}
+
+// 初始載入即時報價和交易紀錄
+fetchPricing();
+updateTransactions();

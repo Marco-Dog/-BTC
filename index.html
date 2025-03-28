@@ -48,7 +48,14 @@
   <form id="transaction-form">
     <label for="transaction-date">日期:</label>
     <input type="date" id="transaction-date" required><br>
-    <label for="transaction-currency">幣別:</label>
+    <label>幣種：</label>
+    <select id="coin">
+      <option value="BTC">BTC</option>
+      <option value="ADA">ADA</option>
+      <option value="DOGE">DOGE</option>
+      <option value="SHIB">SHIB</option>
+      <option value="ETH">ETH</option>
+    </select>
     <input type="text" id="transaction-currency" required><br>
     <label for="transaction-type">買入/賣出:</label>
     <select id="transaction-type">
@@ -64,24 +71,35 @@
     <button type="submit">儲存交易</button>
   </form>
 
-  <h2>交易紀錄</h2>
-  <table id="transaction-list">
-    <thead>
-      <tr>
-        <th>日期</th>
-        <th>幣別</th>
-        <th>類型</th>
-        <th>價格</th>
-        <th>數量</th>
-        <th>手續費</th>
-        <th>備註</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <h2>Google Sheet 資料</h2>
+    <table id="sheet-table">
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>類型</th>
+                <th>價格</th>
+                <th>數量</th>
+                <th>備註</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-  <script src="app.js"></script>
-  <script src="googleSheet.js"></script>
+    <h2>LocalStorage 資料</h2>
+    <table id="local-table">
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>類型</th>
+                <th>價格</th>
+                <th>數量</th>
+                <th>備註</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="app.js"></script>
+    <script src="googleSheet.js"></script>
 </body>
 </html>

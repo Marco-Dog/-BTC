@@ -26,7 +26,7 @@ function fetchPrices() {
                 ETH: data.ethereum.twd,
                 ADA: data.cardano.twd,
                 DOGE: data.dogecoin.twd,
-                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(10))
+                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8))
             };
             updatePriceTable();
         })
@@ -46,9 +46,9 @@ function updatePriceTable() {
             <td>${coin}</td>
             <td>NT$ ${coin === 'SHIB' ? price.toFixed(10) : price.toFixed(2)}</td>
             <td>${data.quantity.toFixed(6)}</td>
-            <td>NT$ ${data.cost.toFixed(6)}</td>
-            <td class="profit">NT$ ${data.profit.toFixed(6)}</td>
-            <td class="profit">${data.returns.toFixed(6)}%</td>
+            <td>NT$ ${data.cost.toFixed(3)}</td>
+            <td class="profit">NT$ ${data.profit.toFixed(2)}</td>
+            <td class="profit">${data.returns.toFixed(2)}%</td>
         </tr>`;
         priceTable.innerHTML += row;
     });
@@ -63,10 +63,11 @@ function addTransaction(event) {
     const quantity = parseFloat(document.getElementById("quantity").value);
     const note = document.getElementById("note").value;
     
-    if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity < 1e-10) {
-        alert("請輸入有效的價格和數量！");
-        return;
-    }
+   if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+    alert("請輸入有效的價格和數量！");
+    return;
+}
+
     
     const fee = type === "buy" ? price * quantity * 0.001 : price * quantity * 0.002;
     
@@ -77,36 +78,18 @@ function addTransaction(event) {
     document.getElementById("transactionForm").reset();
 }
 
-function renderTransactions(sortColumn = null, sortAscending = true) {
+function renderTransactions() {
     const transactionTable = document.getElementById("transactionTable");
-    transactionTable.innerHTML = `<tr>
-            <th onclick="sortTransactions('date')">日期</th>
-            <th onclick="sortTransactions('currency')">幣種</th>
-            <th onclick="sortTransactions('type')">交易類型</th>
-            <th onclick="sortTransactions('price')">價格</th>
-            <th onclick="sortTransactions('quantity')">數量</th>
-            <th onclick="sortTransactions('fee')">手續費</th>
-            <th>備註</th>
-            <th>操作</th>
-        </tr>`;
+    transactionTable.innerHTML = "";
     
-    if (sortColumn) {
-        transactions.sort((a, b) => {
-            if (typeof a[sortColumn] === 'string') {
-                return sortAscending ? a[sortColumn].localeCompare(b[sortColumn]) : b[sortColumn].localeCompare(a[sortColumn]);
-            } else {
-                return sortAscending ? a[sortColumn] - b[sortColumn] : b[sortColumn] - a[sortColumn];
-            }
-        });
-    }
     transactions.forEach((tx, index) => {
         const row = `<tr>
             <td>${tx.date}</td>
             <td>${tx.currency}</td>
             <td>${tx.type}</td>
             <td>${tx.price.toFixed(6)}</td>
-            <td>${tx.quantity}</td>
-            <td>${tx.fee.toFixed(2)}</td>
+            <td>${tx.quantity.toFixed(6)}</td>
+            <td>${tx.fee.toFixed(3)}</td>
             <td>${tx.note}</td>
             <td><button onclick="deleteRow(${index})">刪除</button></td>
         </tr>`;
@@ -166,12 +149,6 @@ function calculateHoldings() {
         holdings[coin] = { quantity, cost, profit, returns };
     }
     return holdings;
-}
-
-function sortTransactions(column) {
-    let currentAscending = localStorage.getItem(`sort_${column}`) === 'true';
-    localStorage.setItem(`sort_${column}`, !currentAscending);
-    renderTransactions(column, !currentAscending);
 }
 
 function openTab(event, tabName) {

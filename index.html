@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +9,11 @@
 <body>
     <div class="container">
         <h1>虛擬貨幣交易追蹤</h1>
-        <ul class="tabs">
-            <li data-tab="prices" class="active">即時報價</li>
-            <li data-tab="transactions">交易紀錄</li>
-        </ul>
-        <div id="prices" class="tab-content active">
+        <div class="tabs">
+            <button class="tablink" onclick="openTab(event, 'prices')">即時報價</button>
+            <button class="tablink" onclick="openTab(event, 'transactions')">交易紀錄</button>
+        </div>
+        <div id="prices" class="tabcontent">
             <table>
                 <thead>
                     <tr>
@@ -25,34 +25,34 @@
                         <th>持倉報酬率</th>
                     </tr>
                 </thead>
-                <tbody id="priceTableBody"></tbody>
+                <tbody id="priceTable"></tbody>
             </table>
         </div>
-        <div id="transactions" class="tab-content">
+        <div id="transactions" class="tabcontent" style="display:none;">
             <form id="transactionForm">
                 <input type="date" id="date" required>
-                <select id="crypto" required>
+                <select id="currency">
                     <option value="BTC">BTC</option>
                     <option value="ETH">ETH</option>
                     <option value="ADA">ADA</option>
                     <option value="DOGE">DOGE</option>
                     <option value="SHIB">SHIB</option>
                 </select>
-                <select id="type" required>
+                <select id="type">
                     <option value="buy">買入</option>
                     <option value="sell">賣出</option>
                 </select>
-                <input type="number" id="price" placeholder="價格" step="0.01" required>
-                <input type="number" id="quantity" placeholder="數量" step="any" required>
+                <input type="number" id="price" placeholder="價格" required>
+                <input type="number" id="quantity" placeholder="數量" required>
                 <input type="text" id="note" placeholder="備註">
-                <button type="submit">提交</button>
+                <button type="submit">新增</button>
             </form>
             <table>
                 <thead>
                     <tr>
                         <th>日期</th>
                         <th>幣別</th>
-                        <th>買入/賣出</th>
+                        <th>類型</th>
                         <th>價格</th>
                         <th>數量</th>
                         <th>手續費</th>
@@ -60,11 +60,10 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="transactionTableBody"></tbody>
+                <tbody id="transactionTable"></tbody>
             </table>
         </div>
     </div>
     <script src="app.js"></script>
-    <script src="googleSheet.js"></script>
 </body>
 </html>

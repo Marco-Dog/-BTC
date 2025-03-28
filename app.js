@@ -22,7 +22,7 @@ async function updateQuotes() {
     updateCurrencyData("ADA", data.cardano.twd, portfolio.ADA);
     updateCurrencyData("DOGE", data.dogecoin.twd, portfolio.DOGE);
     updateCurrencyData("SHIB", data["shiba-inu"].twd, portfolio.SHIB);
-    
+
   } catch (error) {
     console.error("無法取得即時報價:", error);
   }
@@ -65,6 +65,7 @@ updateQuotes();
 
 // 設置每 10 秒自動更新即時報價
 setInterval(updateQuotes, 10000);
+
 // 交易紀錄儲存的陣列
 let transactions = [];
 
@@ -95,7 +96,7 @@ document.getElementById("transaction-form").addEventListener("submit", function(
     amount,
     note
   };
-  
+
   transactions.push(transaction);
 
   // 更新 Google Sheets
@@ -103,7 +104,7 @@ document.getElementById("transaction-form").addEventListener("submit", function(
 
   // 顯示交易紀錄
   renderTransactions();
-  
+
   // 清空表單
   document.getElementById("transaction-form").reset();
 });

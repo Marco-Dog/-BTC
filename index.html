@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +10,11 @@
     <div class="container">
         <h1>虛擬貨幣交易追蹤</h1>
         <div class="tabs">
-            <button class="tablink" onclick="openTab(event, 'prices')">即時報價</button>
-            <button class="tablink" onclick="openTab(event, 'transactions')">交易紀錄</button>
+            <button class="tab-button active" data-tab="prices">即時報價</button>
+            <button class="tab-button" data-tab="transactions">交易紀錄</button>
         </div>
-        <div id="prices" class="tabcontent">
+        
+        <div id="prices" class="tab-content active">
             <table>
                 <thead>
                     <tr>
@@ -25,34 +26,40 @@
                         <th>持倉報酬率</th>
                     </tr>
                 </thead>
-                <tbody id="priceTable"></tbody>
+                <tbody id="prices-table"></tbody>
             </table>
         </div>
-        <div id="transactions" class="tabcontent" style="display:none;">
-            <form id="transactionForm">
-                <input type="date" id="date" required>
-                <select id="currency">
-                    <option value="BTC">BTC</option>
-                    <option value="ETH">ETH</option>
-                    <option value="ADA">ADA</option>
-                    <option value="DOGE">DOGE</option>
-                    <option value="SHIB">SHIB</option>
-                </select>
-                <select id="type">
-                    <option value="buy">買入</option>
-                    <option value="sell">賣出</option>
-                </select>
-                <input type="number" id="price" placeholder="價格" required>
-                <input type="number" id="quantity" placeholder="數量" required>
-                <input type="text" id="note" placeholder="備註">
-                <button type="submit">新增</button>
+
+        <div id="transactions" class="tab-content">
+            <form id="transaction-form">
+                <label>日期: <input type="date" id="date"></label>
+                <label>幣別:
+                    <select id="coin">
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="ADA">ADA</option>
+                        <option value="DOGE">DOGE</option>
+                        <option value="SHIB">SHIB</option>
+                    </select>
+                </label>
+                <label>類型:
+                    <select id="type">
+                        <option value="buy">買入</option>
+                        <option value="sell">賣出</option>
+                    </select>
+                </label>
+                <label>價格: <input type="number" id="price" step="0.01"></label>
+                <label>數量: <input type="number" id="quantity" step="0.00000001"></label>
+                <label>備註: <input type="text" id="note"></label>
+                <button type="submit">新增交易</button>
             </form>
+
             <table>
                 <thead>
                     <tr>
                         <th>日期</th>
                         <th>幣別</th>
-                        <th>類型</th>
+                        <th>買入/賣出</th>
                         <th>價格</th>
                         <th>數量</th>
                         <th>手續費</th>
@@ -60,10 +67,11 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="transactionTable"></tbody>
+                <tbody id="transactions-table"></tbody>
             </table>
         </div>
     </div>
     <script src="app.js"></script>
+    <script src="googleSheet.js"></script>
 </body>
 </html>

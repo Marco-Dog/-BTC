@@ -1,44 +1,9 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const tabs = document.querySelectorAll(".tabs li");
-    const contents = document.querySelectorAll(".tab-content");
+const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbyNSNTIjAZkOxfBLvXUiILTA9syo4Yi-xcTux1xEQv4qDAHHVu9f04CGjES2Nlx-RgG/exec";
 
-    tabs.forEach(tab => {
-        tab.addEventListener("click", function () {
-            tabs.forEach(t => t.classList.remove("active"));
-            contents.forEach(c => c.classList.remove("active"));
-            this.classList.add("active");
-            document.getElementById(this.dataset.tab).classList.add("active");
-        });
+async function saveTransaction(data) {
+    await fetch(GOOGLE_SHEET_API, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
     });
-
-    function fetchPrices() {
-        fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,shiba-inu&vs_currencies=twd")
-            .then(response => response.json())
-            .then(data => {
-                const priceTableBody = document.getElementById("priceTableBody");
-                priceTableBody.innerHTML = "";
-                const coins = {
-                    BTC: "bitcoin",
-                    ETH: "ethereum",
-                    ADA: "cardano",
-                    DOGE: "dogecoin",
-                    SHIB: "shiba-inu"
-                };
-                Object.keys(coins).forEach(coin => {
-                    const price = data[coins[coin]].twd;
-                    const formattedPrice = coin === "SHIB" ? price.toFixed(8) : price.toFixed(2);
-                    const row = `<tr>
-                        <td>${coin}</td>
-                        <td>NT$ ${formattedPrice}</td>
-                        <td>--</td>
-                        <td>--</td>
-                        <td class="profit">--</td>
-                        <td class="profit-rate">--</td>
-                    </tr>`;
-                    priceTableBody.innerHTML += row;
-                });
-            });
-    }
-    setInterval(fetchPrices, 10000);
-    fetchPrices();
-});
+}

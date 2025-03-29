@@ -9,6 +9,10 @@
 <body>
     <div class="container">
         <h1>虛擬貨幣交易追蹤</h1>
+        <div>
+        <p>總持倉獲利：<span id="totalProfit">0</span> 元</p>
+        <p>總持倉報酬率：<span id="profitRate">0%</span></p>
+    </div>
         <div class="tabs">
             <button class="tablink" onclick="openTab(event, 'prices')">即時報價</button>
             <button class="tablink" onclick="openTab(event, 'transactions')">交易紀錄</button>
@@ -42,10 +46,9 @@
                     <option value="buy">買入</option>
                     <option value="sell">賣出</option>
                 </select>
-               <input type="number" id="price" placeholder="價格" required step="0.00000000001">
-                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
+                <input type="number" id="price" placeholder="價格" required step="0.00000000001">
+                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001"">
                 <input type="text" id="note" placeholder="備註">
-
                 <button type="submit">新增</button>
             </form>
             <table>

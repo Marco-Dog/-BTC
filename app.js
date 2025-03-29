@@ -40,19 +40,18 @@ function fetchPrices() {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,shiba-inu&vs_currencies=twd")
         .then(response => response.json())
         .then(data => {
+            console.log("Fetched price data:", data); // 確保 API 回傳資料
             latestPrices = {
-                BTC: data.bitcoin.twd,
-                ETH: data.ethereum.twd,
-                ADA: data.cardano.twd,
-                DOGE: data.dogecoin.twd,
-                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8))
+                BTC: data.bitcoin?.twd || 0,
+                ETH: data.ethereum?.twd || 0,
+                ADA: data.cardano?.twd || 0,
+                DOGE: data.dogecoin?.twd || 0,
+                SHIB: data["shiba-inu"]?.twd ? parseFloat(data["shiba-inu"].twd.toFixed(8)) : 0
             };
+            console.log("Updated latestPrices:", latestPrices); // 確保變數更新
             updatePriceTable();
         })
-        .catch(error => {
-            console.error("Error fetching prices:", error);
-            alert("無法獲取即時價格，請稍後再試。");
-        });
+        .catch(error => console.error("Error fetching prices:", error));
 }
 
 // 更新價格表格

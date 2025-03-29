@@ -8,7 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-let transactions = [];
+let transactions = [
+    // CSV 轉換後的交易紀錄
+    { date: "2025-03-20", currency: "BTC", type: "buy", price: 1000000, quantity: 0.1, fee: 100, note: "測試交易1" },
+    { date: "2025-03-21", currency: "ETH", type: "sell", price: 50000, quantity: 1, fee: 100, note: "測試交易2" }
+];
+
 let latestPrices = {
     BTC: 0,
     ETH: 0,
@@ -36,9 +41,9 @@ function fetchPrices() {
 function updatePriceTable() {
     const priceTable = document.getElementById("priceTable");
     priceTable.innerHTML = "";
-    
+
     const holdings = calculateHoldings();
-    
+
     Object.keys(latestPrices).forEach(coin => {
         const price = latestPrices[coin];
         const data = holdings[coin] || { quantity: 0, cost: 0, profit: 0, returns: 0 };
@@ -62,15 +67,14 @@ function addTransaction(event) {
     const price = parseFloat(document.getElementById("price").value);
     const quantity = parseFloat(document.getElementById("quantity").value);
     const note = document.getElementById("note").value;
-    
-   if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
-    alert("請輸入有效的價格和數量！");
-    return;
-}
 
-    
+    if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+        alert("請輸入有效的價格和數量！");
+        return;
+    }
+
     const fee = type === "buy" ? price * quantity * 0.001 : price * quantity * 0.002;
-    
+
     transactions.push({ date, currency, type, price, quantity, fee, note });
     saveTransactions();
     renderTransactions();
@@ -81,7 +85,7 @@ function addTransaction(event) {
 function renderTransactions() {
     const transactionTable = document.getElementById("transactionTable");
     transactionTable.innerHTML = "";
-    
+
     transactions.forEach((tx, index) => {
         const row = `<tr>
             <td>${tx.date}</td>
@@ -125,11 +129,8 @@ function calculateHoldings() {
         DOGE: { quantity: 0, cost: 0, profit: 0, returns: 0 },
         SHIB: { quantity: 0, cost: 0, profit: 0, returns: 0 }
     };
-    
+
     transactions.forEach(tx => {
-        if (!holdings[tx.currency]) {
-            holdings[tx.currency] = { quantity: 0, cost: 0, profit: 0, returns: 0 };
-        }
         if (tx.type === "buy") {
             holdings[tx.currency].cost += tx.price * tx.quantity + tx.fee;
             holdings[tx.currency].quantity += tx.quantity;
@@ -138,7 +139,7 @@ function calculateHoldings() {
             holdings[tx.currency].quantity -= tx.quantity;
         }
     });
-    
+
     for (const coin in holdings) {
         const currentPrice = latestPrices[coin] || 0;
         const cost = holdings[coin].cost;

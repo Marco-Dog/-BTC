@@ -1,110 +1,71 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+/* 基本重置 */
+* {
     margin: 0;
     padding: 0;
-    text-align: center;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
+body {
+    background-color: #f4f5f7;
     color: #333;
+    line-height: 1.6;
 }
 
-.tabs {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+/* 容器設定 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.tablink {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 5px;
-    font-size: 16px;
+/* 標題樣式 */
+h1, h2, h3 {
+    color: #111;
+    font-weight: bold;
 }
 
-.tablink:hover {
-    background-color: #0056b3;
-}
-
-.tabcontent {
-    display: none;
-}
-
+/* 表格樣式 */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    overflow-x: auto;
-    display: block;
+    margin-bottom: 20px;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #007bff;
-    color: white;
-}
-
-.green {
-    color: green;
+    background-color: #f0f0f0;
     font-weight: bold;
 }
 
-.red {
-    color: red;
+/* 標籤樣式 */
+.tablink {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
     font-weight: bold;
+}
+
+.tablink.active, .tablink:hover {
+    background-color: #333;
+    color: #fff;
 }
 
 /* 響應式設計 */
-@media (max-width: 1024px) {
-    .container {
-        width: 90%;
-    }
-    .tablink {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-    table, th, td {
-        font-size: 14px;
-        padding: 8px;
-    }
-}
-
 @media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 15px;
+    th, td {
+        padding: 10px;
     }
+
     .tablink {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    table, th, td {
-        font-size: 12px;
-        padding: 5px;
+        padding: 8px 15px;
     }
 }

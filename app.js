@@ -3,58 +3,36 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchPrices();
     setInterval(fetchPrices, 10000);
     document.getElementById("transactionForm").addEventListener("submit", addTransaction);
-    document.getElementById("exportCSV").addEventListener("click", exportToCSV);
     document.querySelectorAll(".tablink").forEach(button => {
-        button.addEventListener("click", (event) => openTab(event, button.dataset.tab));
+        button.addEventListener("click", (event) => openTab(event, button.getAttribute("onclick").split("('")[1].split("')")[0]));
     });
 });
 
 let transactions = [];
 let latestPrices = {
-    BTC: 0, ETH: 0, ADA: 0, DOGE: 0, SHIB: 0
+    BTC: 0,
+    ETH: 0,
+    ADA: 0,
+    DOGE: 0,
+    SHIB: 0
 };
 
-// 計算持倉
-function calculateHoldings() {
-    const holdings = {};
-    transactions.forEach(tx => {
-        if (!holdings[tx.currency]) {
-            holdings[tx.currency] = { quantity: 0, cost: 0, profit: 0, returns: 0 };
-        }
-        const cost = tx.price * tx.quantity + tx.fee;
-        if (tx.type === "buy") {
-            holdings[tx.currency].quantity += tx.quantity;
-            holdings[tx.currency].cost += cost;
-        } else if (tx.type === "sell") {
-            holdings[tx.currency].quantity -= tx.quantity;
-            holdings[tx.currency].cost -= cost;
-        }
-        holdings[tx.currency].profit = (holdings[tx.currency].quantity * latestPrices[tx.currency]) - holdings[tx.currency].cost;
-        holdings[tx.currency].returns = (holdings[tx.currency].profit / holdings[tx.currency].cost) * 100;
-    });
-    return holdings;
-}
-
-// 取得即時價格
 function fetchPrices() {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,shiba-inu&vs_currencies=twd")
         .then(response => response.json())
         .then(data => {
-            console.log("Fetched price data:", data); // 確保 API 回傳資料
             latestPrices = {
-                BTC: data.bitcoin?.twd || 0,
-                ETH: data.ethereum?.twd || 0,
-                ADA: data.cardano?.twd || 0,
-                DOGE: data.dogecoin?.twd || 0,
-                SHIB: data["shiba-inu"]?.twd ? parseFloat(data["shiba-inu"].twd.toFixed(8)) : 0
+                BTC: data.bitcoin.twd,
+                ETH: data.ethereum.twd,
+                ADA: data.cardano.twd,
+                DOGE: data.dogecoin.twd,
+                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8))
             };
-            console.log("Updated latestPrices:", latestPrices); // 確保變數更新
             updatePriceTable();
         })
         .catch(error => console.error("Error fetching prices:", error));
 }
 
-// 更新價格表格
 function updatePriceTable() {
     const priceTable = document.getElementById("priceTable");
     priceTable.innerHTML = "";
@@ -68,6 +46,7 @@ function updatePriceTable() {
         const data = holdings[coin] || { quantity: 0, cost: 0, profit: 0, returns: 0 };
         totalProfit += data.profit;
         totalCost += data.cost;
+
         const row = `<tr>
             <td>${coin}</td>
             <td>NT$ ${coin === 'SHIB' ? price.toFixed(10) : price.toFixed(2)}</td>
@@ -78,13 +57,15 @@ function updatePriceTable() {
         </tr>`;
         priceTable.innerHTML += row;
     });
-    
+
+    // 計算總持倉獲利與報酬率
     const totalReturns = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
-    document.getElementById("totalProfit").textContent = `NT$ ${totalProfit.toFixed(2)}`;
-    document.getElementById("totalReturns").textContent = `${totalReturns.toFixed(2)}%`;
+    document.getElementById("totalStats").innerHTML = `
+        總持倉獲利：NT$ ${totalProfit.toFixed(2)}  
+        總持倉報酬率：${totalReturns.toFixed(2)}%
+    `;
 }
 
-// 新增交易
 function addTransaction(event) {
     event.preventDefault();
     const date = document.getElementById("date").value;
@@ -94,11 +75,12 @@ function addTransaction(event) {
     const quantity = parseFloat(document.getElementById("quantity").value);
     const note = document.getElementById("note").value;
     
-    if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
-        alert("請輸入有效的價格和數量！");
-        return;
-    }
+   if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+    alert("請輸入有效的價格和數量！");
+    return;
+}
 
+    
     const fee = type === "buy" ? price * quantity * 0.001 : price * quantity * 0.002;
     
     transactions.push({ date, currency, type, price, quantity, fee, note });
@@ -108,7 +90,6 @@ function addTransaction(event) {
     document.getElementById("transactionForm").reset();
 }
 
-// 渲染交易記錄
 function renderTransactions() {
     const transactionTable = document.getElementById("transactionTable");
     transactionTable.innerHTML = "";
@@ -128,7 +109,6 @@ function renderTransactions() {
     });
 }
 
-// 刪除交易
 function deleteRow(index) {
     transactions.splice(index, 1);
     saveTransactions();
@@ -136,22 +116,15 @@ function deleteRow(index) {
     updatePriceTable();
 }
 
-// 儲存交易到 localStorage
 function saveTransactions() {
-    try {
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-    } catch (error) {
-        console.error("Error saving transactions to localStorage", error);
-    }
+    localStorage.setItem("transactions", JSON.stringify(transactions));
 }
 
-// 載入交易記錄
 function loadTransactions() {
     const savedTransactions = localStorage.getItem("transactions");
-    if (savedTransactions) {
-        transactions = JSON.parse(savedTransactions);
-    } else {
-        // 預設初始交易數據
+
+    // 如果本地無資料，則設置初始交易紀錄
+    if (!savedTransactions) {
         transactions = [
             { date: "2025-03-28", currency: "BTC", type: "buy", price: 3025000.000000, quantity: 0.0025, fee: 7.563, note: "" },
             { date: "2025-03-28", currency: "DOGE", type: "buy", price: 12.210500, quantity: 165, fee: 2.015, note: "" },
@@ -169,13 +142,49 @@ function loadTransactions() {
             { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000576, quantity: 3000000, fee: 1.728, note: "" },
             { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000511, quantity: 6000000, fee: 3.066, note: "" }
         ];
-        saveTransactions();  // 儲存到 localStorage
+        saveTransactions();
+    } else {
+        transactions = JSON.parse(savedTransactions);
     }
+
     renderTransactions();
     updatePriceTable();
 }
 
-// 切換標籤頁
+function calculateHoldings() {
+    let holdings = {
+        BTC: { quantity: 0, cost: 0, profit: 0, returns: 0 },
+        ETH: { quantity: 0, cost: 0, profit: 0, returns: 0 },
+        ADA: { quantity: 0, cost: 0, profit: 0, returns: 0 },
+        DOGE: { quantity: 0, cost: 0, profit: 0, returns: 0 },
+        SHIB: { quantity: 0, cost: 0, profit: 0, returns: 0 }
+    };
+    
+    transactions.forEach(tx => {
+        if (!holdings[tx.currency]) {
+            holdings[tx.currency] = { quantity: 0, cost: 0, profit: 0, returns: 0 };
+        }
+        if (tx.type === "buy") {
+            holdings[tx.currency].cost += tx.price * tx.quantity + tx.fee;
+            holdings[tx.currency].quantity += tx.quantity;
+        } else {
+            holdings[tx.currency].cost -= (tx.price * tx.quantity - tx.fee);
+            holdings[tx.currency].quantity -= tx.quantity;
+        }
+    });
+    
+    for (const coin in holdings) {
+        const currentPrice = latestPrices[coin] || 0;
+        const cost = holdings[coin].cost;
+        const quantity = holdings[coin].quantity;
+        const marketValue = quantity * currentPrice;
+        const profit = marketValue - cost;
+        const returns = cost > 0 ? (profit / cost) * 100 : 0;
+        holdings[coin] = { quantity, cost, profit, returns };
+    }
+    return holdings;
+}
+
 function openTab(event, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => {
         tab.style.display = "none";
@@ -185,20 +194,4 @@ function openTab(event, tabName) {
         tab.classList.remove("active");
     });
     event.currentTarget.classList.add("active");
-}
-
-// 匯出 CSV
-function exportToCSV() {
-    let csvContent = "日期,幣種,類型,價格,數量,手續費,備註\n";
-    transactions.forEach(tx => {
-        csvContent += `${tx.date},${tx.currency},${tx.type},${tx.price},${tx.quantity},${tx.fee},${tx.note}\n`;
-    });
-    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "transactions.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
 }

@@ -1,31 +1,52 @@
-/* 基本重置 */
+/* === Reset CSS === */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
 }
 
 body {
-    background-color: #f4f5f7;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
     color: #333;
-    line-height: 1.6;
 }
 
-/* 容器設定 */
+/* === Responsive Layout === */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* 標題樣式 */
-h1, h2, h3 {
-    color: #111;
-    font-weight: bold;
+/* === Header & Navigation === */
+header {
+    background-color: #1a1a2e;
+    color: #e6e6e6;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* 表格樣式 */
+header h1 {
+    font-size: 24px;
+}
+
+.tablink {
+    background-color: #162447;
+    color: #e6e6e6;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.tablink.active, .tablink:hover {
+    background-color: #1f4068;
+}
+
+/* === Table Styling === */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -34,38 +55,42 @@ table {
 
 th, td {
     padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #ccc;
+    text-align: center;
 }
 
 th {
-    background-color: #f0f0f0;
-    font-weight: bold;
+    background-color: #162447;
+    color: #e6e6e6;
 }
 
-/* 標籤樣式 */
-.tablink {
+/* === Buttons === */
+button {
     padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #e0e0e0;
-    color: #333;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.tablink.active, .tablink:hover {
-    background-color: #333;
+    background-color: #1f4068;
     color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-/* 響應式設計 */
+button:hover {
+    background-color: #e43f5a;
+}
+
+/* === Responsive Breakpoints === */
 @media (max-width: 768px) {
-    th, td {
-        padding: 10px;
+    header h1 {
+        font-size: 18px;
     }
 
     .tablink {
-        padding: 8px 15px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
     }
 }

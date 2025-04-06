@@ -1,96 +1,318 @@
-/* === Reset CSS === */
+/* 基本全局設置 */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 30px;
 }
 
-/* === Responsive Layout === */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* === Header & Navigation === */
-header {
-    background-color: #1a1a2e;
-    color: #e6e6e6;
-    padding: 15px;
+/* 設定標題樣式 */
+.title {
+    font-size: 32px;
+    text-align: center;
+    font-weight: bold;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
-header h1 {
-    font-size: 24px;
+/*頁籤切換*/
+.button-container {
+  padding: 10px;
 }
 
-.tablink {
-    background-color: #162447;
-    color: #e6e6e6;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
+.btn {
+  border: none;
+  font-family: 'Lato', sans-serif;  /* 字體設為 'Lato' */
+  font-size: 16px;  /* 設定文字大小，根據需求調整 */
+  color: inherit;   /* 文字顏色繼承自父元素 */
+  background: none;
+  cursor: pointer;
+  padding: 12px 24px;  /* 改變內邊距，增大按鈕 */
+  display: inline-block;
+  margin: 10px 20px;  /* 按鈕間距 */
+  text-transform: uppercase;
+  letter-spacing: 1px;  /* 增加字母間距 */
+  font-weight: 700;
+  outline: none;
+  position: relative;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 10px; /* 圓角按鈕 */
+  white-space: nowrap;  /* 防止文字換行 */
+  min-width: 150px;  /* 設定最小寬度，確保按鈕足夠大 */
+  text-align: center;  /* 文字居中對齊 */
+}
+
+.d-flex {
+  display: flex;
+}
+
+.btn:after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+/* Pseudo elements for icons */
+.btn:before {
+	font-family: 'FontAwesome';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	position: relative;
+	-webkit-font-smoothing: antialiased;
+}
+
+
+/* Icon separator */
+.btn-sep {
+	padding: 15px 60px 15px 60px;
+}
+
+.btn-sep:before {
+	background: rgba(0,0,0,0.15);
+}
+
+/* Button 1 */
+.btn-1 {
+    background: #3498db;  /* 設置背景顏色為藍色 (#3498db) */
+    color: #fff;          /* 設置文字顏色為白色 */
+}
+
+.btn-1:hover {
+    background: #2980b9;  /* 懸停時背景顏色變為較深的藍色 (#2980b9) */
+}
+
+.btn-1:active {
+    background: #2980b9;  /* 按下時背景顏色保持與懸停時相同 */
+    top: 2px;             /* 按下時使按鈕稍微下移 2px */
+}
+
+.btn-1:before {
+    position: absolute;   /* 使用絕對定位來放置偽元素 */
+    height: 100%;         /* 偽元素的高度與按鈕相同 */
+    left: 0;              /* 偽元素從按鈕的最左邊開始 */
+    top: 0;               /* 偽元素從按鈕的最上邊開始 */
+    line-height: 3;       /* 設定偽元素的行高為 3，可能是用來控制顯示文本垂直居中 */
+    font-size: 140%;      /* 設定字型大小為 140%，使字型較大 */
+    width: 50px;          /* 偽元素的寬度為 50px */
+}
+
+/* Button 2 */
+.btn-2 {
+	background: #2ecc71;
+	color: #fff;
+}
+
+.btn-2:hover {
+	background: #27ae60;
+}
+
+.btn-2:active {
+	background: #27ae60;
+	top: 2px;
+}
+
+.btn-2:before {
+	position: absolute;
+	height: 100%;
+	left: 0;
+	top: 0;
+	line-height: 3;
+	font-size: 140%;
+	width: 50px;
+}
+
+/* Button 3 */
+.btn-3 {
+	background: #e74c3c;
+	color: #fff;
+}
+
+.btn-3:hover {
+	background: #c0392b;
+}
+
+.btn-3:active {
+	background: #c0392b;
+	top: 2px;
+}
+
+.btn-3:before {
+	position: absolute;
+	height: 100%;
+	left: 0;
+	top: 0;
+	line-height: 3;
+	font-size: 140%;
+	width: 50px;
+}
+
+/* Button 4 */
+.btn-4 {
+	background: #34495e;
+	color: #fff;
+}
+
+.btn-4:hover {
+	background: #2c3e50;
+}
+
+.btn-4:active {
+	background: #2c3e50;
+	top: 2px;
+}
+
+.btn-4:before {
+	position: absolute;
+	height: 100%;
+	left: 0;
+	top: 0;
+	line-height: 3;
+	font-size: 140%;
+	width: 50px;
+}
+
+/* Icons */
+
+.icon-cart:before {
+	content: "\f07a";
+}
+
+.icon-heart:before {
+	content: "\f55a";
+}
+
+.icon-info:before {
+	content: "\f05a";
+}
+
+.icon-send:before {
+	content: "\f1d8";
+}
+
+/* 幣別ICON樣式 */
+.icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
     margin-right: 10px;
-    transition: background-color 0.3s;
 }
 
-.tablink.active, .tablink:hover {
-    background-color: #1f4068;
+/* 調整 crypto-container */
+.crypto-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-/* === Table Styling === */
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* 幣別的殼 */
+.crypto-box {
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.crypto-box:hover {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 漲跌顏色 */
+.up {
+    color: #2d6a3a; /* 調整為較柔和的綠色 */
+}
+
+.down {
+    color: #e74c3c; /* 調整為較柔和的紅色 */
+}
+
+/* 表單樣式 */
+#tab2 {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 表單標籤與輸入框 */
+form input, form select {
+    width: 30%;
+    padding: 12px 15px;
     margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    color: #333;
 }
 
-th, td {
-    padding: 12px;
-    border: 1px solid #ccc;
+form input:focus, form select:focus {
+    border-color: #4e7bb6;
+    outline: none;
+}
+
+/* 表格樣式 */
+table {
+    width: 80%;
+    margin-top: 40px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 15px;
     text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
 }
 
-th {
-    background-color: #162447;
-    color: #e6e6e6;
+table th {
+    background-color: #4e7bb6;
+    color: white;
+    font-weight: 600;
 }
 
-/* === Buttons === */
-button {
-    padding: 10px 20px;
-    background-color: #1f4068;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+table td {
+    background-color: #ffffff;
+    color: #555;
 }
 
-button:hover {
-    background-color: #e43f5a;
-}
-
-/* === Responsive Breakpoints === */
+/* 小螢幕調整 */
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 18px;
+    .crypto-box {
+        flex: 1 1 100%;
     }
 
-    .tablink {
-        padding: 8px 16px;
+    form input, form select, form button {
         font-size: 14px;
     }
 
-    th, td {
-        padding: 8px;
-        font-size: 14px;
+    table th, table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    table td button {
+        padding: 4px 8px;
+    }
+}
+
+/* 調整 crypto-box 在大螢幕的顯示 */
+@media (min-width: 769px) {
+    .crypto-box {
+        flex: 1 1 20%;
     }
 }

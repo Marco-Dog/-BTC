@@ -1,68 +1,60 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <title>即時虛擬貨幣報價</title>
+    <title>虛擬貨幣交易追蹤</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <!-- 標題 -->
         <h1>虛擬貨幣交易追蹤</h1>
-        
-        <!-- 獲利顯示區 -->
-        <div id="totalStats">
-            總持倉獲利：NT$ 0.00
-            <br>
-            總持倉報酬率：0.00%
-        </div>
-        
-        <!-- 頁籤切換按鈕 -->
-        <div class="button-container d-flex">
-          <button class="tab-button active btn btn-1 btn-sep icon-info" onclick="switchTab('tab1')">即時報價</button>
-          <button class="tab-button btn btn-2 btn-sep icon-heart" onclick="switchTab('tab2')">交易紀錄</button>
-        </div>
+        <div>
+<div id="totalStats">
+    總持倉獲利：NT$ 0.00
+    <br>
+    總持倉報酬率：0.00%
+</div>
 
-        <!-- 即時報價區 -->
-        <div class="tab-content">
-            <div id="tab1" class="tabcontent" style="display: block;">
-
-                <div id="crypto-container" class="crypto-container">
-                    <!-- JavaScript 動態生成 -->
-                </div>
-            </div>
+    </div>
+        <div class="tabs">
+            <button class="tablink" onclick="openTab(event, 'prices')">即時報價</button>
+            <button class="tablink" onclick="openTab(event, 'transactions')">交易紀錄</button>
         </div>
-
-        <!-- 交易紀錄區 -->
-        <div id="tab2" class="tabcontent" style="display: none;">
+        <div id="prices" class="tabcontent">
+            <table>
+                <thead>
+                    <tr>
+                        <th>幣別</th>
+                        <th>即時報價 (NT$)</th>
+                        <th>總持倉量</th>
+                        <th>持倉成本</th>
+                        <th>持倉獲利</th>
+                        <th>持倉報酬率</th>
+                    </tr>
+                </thead>
+                <tbody id="priceTable"></tbody>
+            </table>
+        </div>
+        <div id="transactions" class="tabcontent" style="display:none;">
             <form id="transactionForm">
-                <label for="date">交易日期：</label>
                 <input type="date" id="date" required>
-                <label for="currency">幣別：</label>
                 <select id="currency">
                     <option value="BTC">BTC</option>
                     <option value="ETH">ETH</option>
                     <option value="ADA">ADA</option>
                     <option value="DOGE">DOGE</option>
                     <option value="SHIB">SHIB</option>
-                </select><br>
-                <label for="type">交易類型：</label>
-                <select id="type">
-                    <option value="BUY">買入</option>
-                    <option value="SELL">賣出</option>
                 </select>
-                <label for="price">價格：</label>
-                <input type="number" id="price" placeholder="價格" required step="0.01"><br>
-                <label for="quantity">數量：</label>
-                <input type="number" id="quantity" placeholder="數量" required step="0.00000001">
-                <label for="note">備註：</label>
-                <input type="text" id="note" placeholder="備註"><br>
-                <button class="btn btn-4 btn-sep icon-send" type="submit">新增</button>
+                <select id="type">
+                    <option value="buy">買入</option>
+                    <option value="sell">賣出</option>
+                </select>
+                <input type="number" id="price" placeholder="價格" required step="0.00000000001">
+                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001"">
+                <input type="text" id="note" placeholder="備註">
+                <button type="submit">新增</button>
             </form>
-
             <table>
                 <thead>
                     <tr>
@@ -80,8 +72,6 @@
             </table>
         </div>
     </div>
-<body>
     <script src="app.js"></script>
-    <script src="script.js"></script> <!-- 確保你的script.js 正確載入 -->
 </body>
 </html>

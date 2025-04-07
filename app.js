@@ -14,7 +14,8 @@ let latestPrices = {
     ETH: 0,
     ADA: 0,
     DOGE: 0,
-    SHIB: 0
+    SHIB: 0,
+    SOL: 0
 };
 
 function fetchPrices() {
@@ -26,7 +27,8 @@ function fetchPrices() {
                 ETH: data.ethereum.twd,
                 ADA: data.cardano.twd,
                 DOGE: data.dogecoin.twd,
-                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8))
+                SHIB: parseFloat(data["shiba-inu"].twd.toFixed(8)),
+                SOL: data.solana.twd,
             };
             updatePriceTable();
         })

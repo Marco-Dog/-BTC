@@ -19,7 +19,7 @@ let latestPrices = {
 };
 
 function fetchPrices() {
-    fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,shiba-inu&vs_currencies=twd")
+    fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,solana,shiba-inu&vs_currencies=twd")
         .then(response => response.json())
         .then(data => {
             latestPrices = {

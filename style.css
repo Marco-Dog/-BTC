@@ -312,28 +312,34 @@ td:nth-child(8) {
 
 @media screen and (max-width: 768px) {
 
-    /* 容器內邊距縮小 */
+    /* 容器左右內距縮小、內容置中 */
     .container {
-        width: 90%;
+        width: 95%;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    /* 頁面標題縮小字體 */
+    /* 頁面標題置中 */
     h1 {
         font-size: 2rem;
+        text-align: center;
     }
 
-    /* 統計區塊改為直排 */
+    /* 統計區塊改為垂直置中堆疊 */
     .stats-card-wide {
         flex-direction: column;
         gap: 20px;
+        align-items: center;
     }
 
     .stat-block {
         width: 100%;
+        max-width: 400px;
     }
 
-    /* 頁籤垂直排列 */
+    /* 頁籤垂直排列並置中 */
     .tabs {
         flex-direction: column;
         align-items: center;
@@ -343,23 +349,32 @@ td:nth-child(8) {
         width: 90%;
         margin: 5px 0;
         font-size: 1rem;
+        text-align: center;
     }
 
-    /* 卡片改為單欄排列 */
+    /* 卡片容器改為單欄置中排列 */
     .card-container {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 15px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 400px;
     }
 
     .card-header h3 {
         font-size: 24px;
+        justify-content: center;
     }
 
     .card-header p.price {
         font-size: 24px;
     }
 
-    /* 卡片統計資料垂直排列 */
+    /* 卡片統計資料垂直排列 + 置中 */
     .card-stats {
         flex-direction: column;
         gap: 10px;
@@ -368,26 +383,44 @@ td:nth-child(8) {
 
     .stat {
         width: 100%;
+        max-width: 300px;
     }
 
-    /* 表單欄位全寬 */
+    /* 表單欄位與按鈕置中顯示 */
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     form input, form select, form button,
     #sortOption {
-        max-width: 100%;
+        width: 100%;
+        max-width: 400px;
         font-size: 1rem;
+        text-align: center;
     }
 
-    /* 表格橫向滾動 */
+    /* 表格可橫向滑動 + 置中顯示 */
     .transaction-card {
         overflow-x: auto;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     table {
-        min-width: 700px; /* 確保可橫向滑動 */
+        min-width: 700px;
+        margin: 0 auto;
     }
 
+    /* 刪除按鈕置中縮小 */
     .delete-btn {
         font-size: 0.85rem;
         padding: 6px 12px;
+        display: block;
+        margin: 10px auto 0 auto;
     }
 }

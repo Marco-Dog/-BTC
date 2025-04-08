@@ -1,41 +1,182 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>虛擬貨幣交易追蹤</title>
     <link rel="stylesheet" href="style.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
     <div class="container">
         <h1>虛擬貨幣交易追蹤</h1>
-        <div>
-<div id="totalStats">
-    總持倉獲利：NT$ 0.00
-    <br>
-    總持倉報酬率：0.00%
+
+        <!-- 總持倉資訊 -->
+       <div id="totalStats" class="stats-card-wide">
+  <div class="stat-block full-width">
+    <h3>總市值</h3>
+    <span id="totalValue"></span>
+  </div>
+  <div class="stat-block">
+    <h4>總盈虧</h4>
+    <span id="totalProfit"></span>
+  </div>
+  <div class="stat-block">
+    <h4>報酬率</h4>
+    <span id="totalROI"></span>
+  </div>
 </div>
 
-    </div>
+
+        <!-- 頁籤區塊 -->
         <div class="tabs">
-            <button class="tablink" onclick="openTab(event, 'prices')">即時報價</button>
-            <button class="tablink" onclick="openTab(event, 'transactions')">交易紀錄</button>
+          <button class="tablink btn btn-1 btn-sep icon-info" data-tab="prices">即時報價</button>
+          <button class="tablink btn btn-2 btn-sep icon-cart" data-tab="transactions">交易紀錄</button>
         </div>
-        <div id="prices" class="tabcontent">
-            <table>
-                <thead>
-                    <tr>
-                        <th>幣別</th>
-                        <th>即時報價 (NT$)</th>
-                        <th>總持倉量</th>
-                        <th>持倉成本</th>
-                        <th>持倉獲利</th>
-                        <th>持倉報酬率</th>
-                    </tr>
-                </thead>
-                <tbody id="priceTable"></tbody>
-            </table>
+
+       <!-- 即時報價區域 -->
+<div class="quote-container">
+  <div id="prices" class="tabcontent">
+    <div class="card-container">
+
+    <!-- BTC 卡片 -->
+    <div class="card" id="card-BTC">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="BTC-icon">BTC</h3>
+        <p class="price">NT$ 0.00</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.000</span>
         </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETH 卡片 -->
+    <div class="card" id="card-ETH">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" alt="ETH-icon">ETH</h3>
+        <p class="price">NT$ 0.00</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADA 卡片 -->
+    <div class="card" id="card-ADA">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://cryptologos.cc/logos/cardano-ada-logo.png" alt="ADA-icon">ADA</h3>
+        <p class="price">NT$ 0.00</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOGE 卡片 -->
+    <div class="card" id="card-DOGE">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png" alt="DOGE-icon">DOGE</h3>
+        <p class="price">NT$ 0.00</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIB 卡片 -->
+    <div class="card" id="card-SHIB">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://cryptologos.cc/logos/shiba-inu-shib-logo.png" alt="SHIB-icon">SHIB</h3>
+        <p class="price">NT$ 0.00000000</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+    <!-- SOL 卡片 -->
+    <div class="card" id="card-SOL">
+      <div class="card-header">
+        <h3><img class="coin-icon" src="https://cryptologos.cc/logos/shiba-inu-shib-logo.png" alt="SOL-icon">SOL</h3>
+        <p class="price">NT$ 0.00</p>
+      </div>
+      <div class="card-stats">
+        <div class="stat">
+          <span class="label">總持倉量</span>
+          <span class="value quantity">0.000</span>
+        </div>
+        <div class="stat">
+          <span class="label">持倉獲利</span>
+          <span class="value profit">NT$ 0.00</span>
+        </div>
+        <div class="stat">
+          <span class="label">報酬率</span>
+          <span class="value roi">0.00%</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+        <!-- 交易紀錄區域 -->
         <div id="transactions" class="tabcontent" style="display:none;">
             <form id="transactionForm">
                 <input type="date" id="date" required>
@@ -45,18 +186,23 @@
                     <option value="ADA">ADA</option>
                     <option value="DOGE">DOGE</option>
                     <option value="SHIB">SHIB</option>
-                    <option value="DOGE">SOL</option>
-
+                    <option value="SOL">SOL</option>
                 </select>
                 <select id="type">
                     <option value="buy">買入</option>
                     <option value="sell">賣出</option>
                 </select>
                 <input type="number" id="price" placeholder="價格" required step="0.00000000001">
-                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001"">
-                <input type="text" id="note" placeholder="備註">
+                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
+                <input type="text" id="note" placeholder="備註"><br>
                 <button type="submit">新增</button>
             </form>
+            <select id="sortOption">
+                <option value="date">按日期排序</option>
+                <option value="currency">按幣別排序</option>
+                <option value="profit">按獲利排序</option>
+            </select>
+
             <table>
                 <thead>
                     <tr>
@@ -74,6 +220,8 @@
             </table>
         </div>
     </div>
+
     <script src="app.js"></script>
 </body>
+
 </html>

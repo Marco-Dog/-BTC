@@ -126,7 +126,7 @@ h1 {
 
 /* 幣別價格樣式 */
 .card-header p.price {
-    font-size: 25px; /* 放大即時報價數字 */
+    font-size: 30px; /* 放大即時報價數字 */
     font-weight: bold;
     color: #4e7bb6;
     white-space: nowrap; /* 防止換行 */

@@ -25,8 +25,8 @@ h1 {
 .stats-card-wide {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 40px;
-    gap: 15px;
+    margin-bottom: 20px;
+    gap: 10px;
 }
 
 .stat-block {
@@ -279,6 +279,12 @@ td:nth-child(8) {
     width: 12%;
 }
 
+/* 日期欄寬一點點 */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 18%;
+}
+
 /* 數量欄寬一點點 */
 th:nth-child(5),
 td:nth-child(5) {
@@ -312,69 +318,69 @@ td:nth-child(8) {
 
 @media screen and (max-width: 768px) {
 
-    /* 容器左右內距縮小、內容置中 */
+    /* 容器內邊距縮小 */
     .container {
         width: 95%;
         padding: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
-    /* 頁面標題置中 */
+    /* 頁面標題縮小字體 */
     h1 {
         font-size: 2rem;
-        text-align: center;
     }
 
-    /* 統計區塊改為垂直置中堆疊 */
+   /* 統計區塊改為垂直置中堆疊 */
     .stats-card-wide {
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-    }
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
 
     .stat-block {
-        width: 100%;
-        max-width: 400px;
-    }
+    width: 90%;
+    max-width: 400px;
+}
 
-    /* 頁籤垂直排列並置中 */
+  /* 統計標題字體大小 */
+    .stat-block h3, .stat-block h4 {
+    font-size: 1rem; /* 調小一點（原本約 1.5rem） */
+}
+
+  /* 統計主數字 */
+    .stat-block span {
+    font-size: 18px; /* 原本是 25px，手機上稍微縮小 */
+}
+
+
+    /* 頁籤垂直排列 */
     .tabs {
-        flex-direction: column;
-        align-items: center;
+      flex-direction: row;        
+      align-items: center;
+      gap: 8px;
+
     }
 
     .tablink {
-        width: 90%;
+        width: 40%;
         margin: 5px 0;
         font-size: 1rem;
-        text-align: center;
     }
 
-    /* 卡片容器改為單欄置中排列 */
+    /* 卡片改為單欄排列 */
     .card-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
         gap: 15px;
-    }
-
-    .card {
-        width: 100%;
-        max-width: 400px;
     }
 
     .card-header h3 {
         font-size: 24px;
-        justify-content: center;
     }
 
     .card-header p.price {
         font-size: 24px;
     }
 
-    /* 卡片統計資料垂直排列 + 置中 */
+    /* 卡片統計資料垂直排列 */
     .card-stats {
         flex-direction: column;
         gap: 10px;
@@ -383,44 +389,26 @@ td:nth-child(8) {
 
     .stat {
         width: 100%;
-        max-width: 300px;
     }
 
-    /* 表單欄位與按鈕置中顯示 */
-    form {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
+    /* 表單欄位全寬 */
     form input, form select, form button,
     #sortOption {
-        width: 100%;
-        max-width: 400px;
+        max-width: 100%;
         font-size: 1rem;
-        text-align: center;
     }
 
-    /* 表格可橫向滑動 + 置中顯示 */
+    /* 表格橫向滾動 */
     .transaction-card {
         overflow-x: auto;
-        width: 100%;
-        max-width: 100%;
-        display: flex;
-        justify-content: center;
     }
 
     table {
         min-width: 700px;
-        margin: 0 auto;
     }
 
-    /* 刪除按鈕置中縮小 */
     .delete-btn {
         font-size: 0.85rem;
         padding: 6px 12px;
-        display: block;
-        margin: 10px auto 0 auto;
     }
 }

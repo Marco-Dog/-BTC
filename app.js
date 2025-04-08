@@ -24,6 +24,32 @@ let latestPrices = {
     BTC: 0, ETH: 0, ADA: 0, DOGE: 0, SHIB: 0, SOL: 0
 };
 
+// 格式化數字，添加千位分隔符並設置小數點位數
+function formatNumber(number, coin = "default") {
+    if (isNaN(number)) return "0";
+
+    let decimals;
+    switch (coin) {
+        case "BTC":
+            decimals = 6;
+            break;
+        case "SHIB":
+            decimals = 6;
+            break;
+        case "SOL":
+            decimals = 3;
+            break;
+        default:
+            decimals = 2;
+    }
+
+    return number.toLocaleString('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
+}
+
+
 function fetchPrices() {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,solana,shiba-inu&vs_currencies=twd")
         .then(res => res.json())
@@ -49,15 +75,18 @@ function updateCardDisplay() {
         if (!card) return;
 
         const price = latestPrices[coin];
-        const data = holdings[coin] || { quantity: 0, profit: 0 };
+        const data = holdings[coin] || { quantity: 0, profit: 0, roi: 0 };
 
-        card.querySelector(".price").textContent = `NT$ ${price.toFixed(coin === "SHIB" ? 6 : 2)}`;
-        card.querySelector(".quantity").textContent = ` ${data.quantity.toFixed(coin === "BTC" ? 7 : 2)}`;
-        card.querySelector(".profit").textContent = ` NT$ ${data.profit.toFixed(2)}`;
+        // 更新卡片顯示
+        card.querySelector(".price").textContent = `NT$ ${formatNumber(price)}`;
+        card.querySelector(".quantity").textContent = ` ${formatNumber(data.quantity)}`;
+        card.querySelector(".profit").textContent = ` NT$ ${formatNumber(data.profit)}`;
+        card.querySelector(".roi").textContent = `${data.roi}%`;  // 顯示報酬率
     });
 
     updateTotalStats();
 }
+
 
 function updateTotalStats() {
     const holdings = calculateHoldings();
@@ -69,8 +98,7 @@ function updateTotalStats() {
         totalValue += quantity * latestPrices[coin];
     }
 
-    // 💡 這行搬到這裡才有 totalValue 的值！
-    document.getElementById("totalValue").textContent = `NT$ ${totalValue.toFixed(2)}`;
+    document.getElementById("totalValue").textContent = `NT$ ${formatNumber(totalValue, 2)}`;
 
     const totalProfit = totalValue - totalCost;
     const totalROI = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
@@ -78,8 +106,8 @@ function updateTotalStats() {
     const profitSpan = document.getElementById("totalProfit");
     const roiSpan = document.getElementById("totalROI");
 
-    profitSpan.textContent = `NT$ ${totalProfit < 0 ? '-' : ''}${Math.abs(totalProfit).toFixed(2)}`;
-    roiSpan.textContent = `${totalROI < 0 ? '-' : ''}${Math.abs(totalROI).toFixed(2)}%`;
+    profitSpan.textContent = `NT$ ${formatNumber(totalProfit, 2)}`;
+    roiSpan.textContent = `${formatNumber(totalROI, 2)}%`;
 
     profitSpan.className = totalProfit >= 0 ? "positive" : "negative";
     roiSpan.className = totalROI >= 0 ? "positive" : "negative";
@@ -127,9 +155,9 @@ function renderTransactions(sortBy = "date") {
                 <td>${tx.date}</td>
                 <td>${tx.currency}</td>
                 <td>${tx.type}</td>
-                <td>${tx.price.toFixed(6)}</td>
-                <td>${tx.quantity.toFixed(6)}</td>
-                <td>${tx.fee.toFixed(3)}</td>
+                <td>${formatNumber(tx.price, 6)}</td>
+                <td>${formatNumber(tx.quantity, 6)}</td>
+                <td>${formatNumber(tx.fee, 3)}</td>
                 <td>${tx.note}</td>
                 <td><button class="delete-btn" onclick="deleteRow(${index})">刪除</button></td>
             </tr>`;
@@ -161,12 +189,12 @@ function loadTransactions() {
 
 function calculateHoldings() {
     const holdings = {
-        BTC: { quantity: 0, cost: 0, profit: 0 },
-        ETH: { quantity: 0, cost: 0, profit: 0 },
-        ADA: { quantity: 0, cost: 0, profit: 0 },
-        DOGE: { quantity: 0, cost: 0, profit: 0 },
-        SHIB: { quantity: 0, cost: 0, profit: 0 },
-        SOL: { quantity: 0, cost: 0, profit: 0 }
+        BTC: { quantity: 0, cost: 0, profit: 0, roi: 0 },
+        ETH: { quantity: 0, cost: 0, profit: 0, roi: 0 },
+        ADA: { quantity: 0, cost: 0, profit: 0, roi: 0 },
+        DOGE: { quantity: 0, cost: 0, profit: 0, roi: 0 },
+        SHIB: { quantity: 0, cost: 0, profit: 0, roi: 0 },
+        SOL: { quantity: 0, cost: 0, profit: 0, roi: 0 }
     };
 
     transactions.forEach(tx => {
@@ -185,10 +213,13 @@ function calculateHoldings() {
     for (const coin in holdings) {
         const h = holdings[coin];
         h.profit = h.quantity > 0 ? h.quantity * latestPrices[coin] - h.cost : 0;
+        // 計算報酬率
+        h.roi = h.cost > 0 ? ((h.profit / h.cost) * 100).toFixed(2) : 0;
     }
 
     return holdings;
 }
+
 
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => {
@@ -203,4 +234,4 @@ function openTab(evt, tabName) {
     if (selectedTab) selectedTab.style.display = "block";
 
     evt.currentTarget.classList.add("active");
-} 
+}

@@ -7,7 +7,7 @@
     <title>虛擬貨幣交易追蹤</title>
     <link rel="stylesheet" href="style.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -15,210 +15,228 @@
         <h1>虛擬貨幣交易追蹤</h1>
 
         <!-- 總持倉資訊 -->
-       <div id="totalStats" class="stats-card-wide">
-  <div class="stat-block full-width">
-    <h3>總市值</h3>
-    <span id="totalValue"></span>
-  </div>
-  <div class="stat-block">
-    <h4>總盈虧</h4>
-    <span id="totalProfit"></span>
-  </div>
-  <div class="stat-block">
-    <h4>報酬率</h4>
-    <span id="totalROI"></span>
-  </div>
-</div>
-
+        <div id="totalStats" class="stats-card-wide">
+            <div class="stat-block full-width">
+                <h3>總市值</h3>
+                <span id="totalValue"></span>
+            </div>
+            <div class="stat-block">
+                <h4>總盈虧</h4>
+                <span id="totalProfit"></span>
+            </div>
+            <div class="stat-block">
+                <h4>報酬率</h4>
+                <span id="totalROI"></span>
+            </div>
+        </div>
 
         <!-- 頁籤區塊 -->
         <div class="tabs">
-          <button class="tablink btn-container btn btn-1 btn-sep icon-info" data-tab="prices">即時報價</button>
-          <button class="tablink btn-container btn btn-2 btn-sep icon-cart" data-tab="transactions">交易紀錄</button>
+            <button class="tablink btn-container btn btn-1 btn-sep icon-info" data-tab="prices">即時報價</button>
+            <button class="tablink btn-container btn btn-2 btn-sep icon-cart" data-tab="transactions">交易紀錄</button>
         </div>
 
-       <!-- 即時報價區域 -->
-<div class="quote-container">
-  <div id="prices" class="tabcontent">
-    <div class="card-container">
+        <!-- 即時報價區域 -->
+        <div class="quote-container">
+            <div id="prices" class="tabcontent">
+                <div class="card-container">
+                    <!-- BTC 卡片 -->
+                    <div class="card" id="card-BTC">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="BTC-icon">
+                                BTC
+                            </h3>
+                            <p class="price">NT$ 0.00</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.000</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- BTC 卡片 -->
-    <div class="card" id="card-BTC">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="BTC-icon">BTC</h3>
-        <p class="price">NT$ 0.00</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.000</span>
-        </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
+                    <!-- ETH 卡片 -->
+                    <div class="card" id="card-ETH">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" alt="ETH-icon">
+                                ETH
+                            </h3>
+                            <p class="price">NT$ 0.00</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- ETH 卡片 -->
-    <div class="card" id="card-ETH">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" alt="ETH-icon">ETH</h3>
-        <p class="price">NT$ 0.00</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
+                    <!-- ADA 卡片 -->
+                    <div class="card" id="card-ADA">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png" alt="ADA-icon">
+                                ADA
+                            </h3>
+                            <p class="price">NT$ 0.00</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- ADA 卡片 -->
-    <div class="card" id="card-ADA">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png" alt="ADA-icon">ADA</h3>
-        <p class="price">NT$ 0.00</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
+                    <!-- DOGE 卡片 -->
+                    <div class="card" id="card-DOGE">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png" alt="DOGE-icon">
+                                DOGE
+                            </h3>
+                            <p class="price">NT$ 0.00</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- DOGE 卡片 -->
-    <div class="card" id="card-DOGE">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png" alt="DOGE-icon">DOGE</h3>
-        <p class="price">NT$ 0.00</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
+                    <!-- SHIB 卡片 -->
+                    <div class="card" id="card-SHIB">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png" alt="SHIB-icon">
+                                SHIB
+                            </h3>
+                            <p class="price">NT$ 0.00000000</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- SHIB 卡片 -->
-    <div class="card" id="card-SHIB">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png" alt="SHIB-icon">SHIB</h3>
-        <p class="price">NT$ 0.00000000</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.00</span>
+                    <!-- SOL 卡片 -->
+                    <div class="card" id="card-SOL">
+                        <div class="card-header">
+                            <h3>
+                                <img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" alt="SOL-icon">
+                                SOL
+                            </h3>
+                            <p class="price">NT$ 0.00</p>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="label">總持倉量</span>
+                                <span class="value quantity">0.000</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">持倉獲利</span>
+                                <span class="value profit">NT$ 0.00</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">報酬率</span>
+                                <span class="value roi">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
-    <!-- SOL 卡片 -->
-    <div class="card" id="card-SOL">
-      <div class="card-header">
-        <h3><img class="coin-icon" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" alt="SOL-icon">SOL</h3>
-        <p class="price">NT$ 0.00</p>
-      </div>
-      <div class="card-stats">
-        <div class="stat">
-          <span class="label">總持倉量</span>
-          <span class="value quantity">0.000</span>
-        </div>
-        <div class="stat">
-          <span class="label">持倉獲利</span>
-          <span class="value profit">NT$ 0.00</span>
-        </div>
-        <div class="stat">
-          <span class="label">報酬率</span>
-          <span class="value roi">0.00%</span>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-</div>
 
         <!-- 交易紀錄區域 -->
         <div id="transactions" class="tabcontent" style="display:none;">
-          <div class="transaction-card">
-            <form id="transactionForm">
-                <input type="date" id="date" required>
-                <select id="currency">
-                    <option value="BTC">BTC</option>
-                    <option value="ETH">ETH</option>
-                    <option value="ADA">ADA</option>
-                    <option value="DOGE">DOGE</option>
-                    <option value="SHIB">SHIB</option>
-                    <option value="SOL">SOL</option>
+            <div class="transaction-card">
+                <form id="transactionForm">
+                    <input type="date" id="date" required>
+                    <select id="currency">
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="ADA">ADA</option>
+                        <option value="DOGE">DOGE</option>
+                        <option value="SHIB">SHIB</option>
+                        <option value="SOL">SOL</option>
+                    </select>
+                    <select id="type">
+                        <option value="buy">買入</option>
+                        <option value="sell">賣出</option>
+                    </select>
+                    <input type="number" id="price" placeholder="價格" required step="0.00000000001">
+                    <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
+                    <input type="text" id="note" placeholder="備註"><br>
+                    <button type="submit">新增</button>
+                </form>
+                <select id="sortOption">
+                    <option value="date">按日期排序</option>
+                    <option value="currency">按幣別排序</option>
+                    <option value="profit">按獲利排序</option>
                 </select>
-                <select id="type">
-                    <option value="buy">買入</option>
-                    <option value="sell">賣出</option>
-                </select>
-                <input type="number" id="price" placeholder="價格" required step="0.00000000001">
-                <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
-                <input type="text" id="note" placeholder="備註"><br>
-                <button type="submit">新增</button>
-            </form>
-            <select id="sortOption">
-                <option value="date">按日期排序</option>
-                <option value="currency">按幣別排序</option>
-                <option value="profit">按獲利排序</option>
-            </select>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>幣別</th>
-                        <th>類型</th>
-                        <th>價格</th>
-                        <th>數量</th>
-                        <th>手續費</th>
-                        <th>備註</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="transactionTable"></tbody>
-            </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>幣別</th>
+                            <th>類型</th>
+                            <th>價格</th>
+                            <th>數量</th>
+                            <th>手續費</th>
+                            <th>備註</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTable"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 

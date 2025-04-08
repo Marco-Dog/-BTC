@@ -8,7 +8,7 @@ body {
 
 /* 容器設定，讓內容區域居中 */
 .container {
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
     padding: 20px;
 }
@@ -45,7 +45,7 @@ h1 {
 
 .stat-block span {
     display: block;
-    font-size: 1.4rem; /* 稍微調整字型 */
+    font-size: 25px; /* 稍微調整字型 */
     margin-top: 10px;
     color: #333;
 }
@@ -187,6 +187,7 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* 表單內的輸入欄位和選單 */
 form input, form select {
     width: 100%; /* 這裡可以換成固定寬度，舉例來說 width: 300px; */
     max-width: 400px; /* 限制最大寬度 */
@@ -210,6 +211,7 @@ form input[placeholder], form select {
     color: #aaa;
 }
 
+/* 按鈕樣式 */
 form button {
     width: 100%; /* 可以換成固定寬度，舉例來說 width: 300px; */
     max-width: 400px; /* 限制最大寬度 */
@@ -247,23 +249,65 @@ form button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    table-layout: fixed;
 }
 
-table th, table td {
-    padding: 15px; /* 增加內邊距 */
-    text-align: center;
+th, td {
     border: 1px solid #ddd;
-    font-size: 16px; /* 字型稍大，提升可讀性 */
+    text-align: center;
+    padding: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-table th {
-    background-color: #f0f0f0;
-    color: #333;
+/* 先設定所有欄位為均寬 */
+th:nth-child(1),
+th:nth-child(2),
+th:nth-child(3),
+th:nth-child(4),
+th:nth-child(6),
+th:nth-child(7),
+th:nth-child(8),
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(6),
+td:nth-child(7),
+td:nth-child(8) {
+    width: 12%;
 }
 
-table td {
-    color: #333;
+/* 數量欄寬一點點 */
+th:nth-child(5),
+td:nth-child(5) {
+    width: 18%;
+}
+
+/* 操作欄窄一點點 */
+th:nth-child(8),
+td:nth-child(8) {
+    width: 8%;
+}
+
+/* 刪除按鈕樣式 */
+.delete-btn {
+    background-color: #e74c3c; /* 背景色：紅色 */
+    color: #ffffff;            /* 字體顏色：白色 */
+    font-size: 12px;           /* 字體大小 */
+    padding: 8px 15px;         /* 內距 */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* hover 時變深紅 */
+    transform: scale(1.05);    /* 放大一點點，強調互動感 */
+    color: #fff;               /* 字體顏色可保持或微調 */
 }
 
 /* 響應式設計 */
@@ -294,8 +338,26 @@ table td {
         margin: 10px 0;
     }
 
-    /* 表格調整為單欄顯示 */
-    table th, table td {
-        font-size: 14px;
+    /* 表格水平滾動 */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    thead, tbody, th, td, tr {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    th, td {
+        width: auto;
+        min-width: 120px;
+    }
+
+    /* 調整操作欄較小 */
+    th:nth-child(8),
+    td:nth-child(8) {
+        min-width: 80px;
     }
 }

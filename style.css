@@ -1,64 +1,392 @@
-/* 基本樣式重置 */
+/* === Reset CSS === */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Noto Sans TC', sans-serif;
 }
 
 body {
-    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
     color: #333;
-    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* 排版樣式 */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+h1 {
+    text-align: center;
+    font-size: 30px;
+    margin: 5px 0;
+    padding: 10px;
 }
 
-.header, .footer {
-    background-color: #333;
-    color: #fff;
-    padding: 15px;
+#totalStats {
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
     text-align: center;
 }
 
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: #444;
+.positive {
+    color: #27ae60;
+}
+
+.positive::before {
+    content: "📈";
+    font-size: 20px;
+}
+
+.negative {
+    color: #e74c3c;
+}
+
+.negative::before {
+    content: "📉";
+    font-size: 20px;
+}
+
+/* === Card Styles === */
+/* 外層容器 - 即時報價區域的殼 */
+.quote-container {
+    background-color: #ffffff; /* 背景顏色 */
+    border-radius: 12px; /* 圓角 */
+    padding: 20px; /* 內邊距 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影 */
+    margin: 20px; /* 外邊距 */
+}
+
+/* 卡片區域 - 內部容器 */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
 }
 
 .card {
-    background-color: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    border-radius: 10px;
+    width: 30%; /* 改為100%寬度，讓它在小屏幕下可以填滿容器 */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 0; /* 增加上下間距，確保卡片不會貼得太緊 */
+
+    /* 標題區域 (即時報價) */
+}
+
+.card-header {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-/* 圖片樣式 */
-.image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+.card-header h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
-/* 按鈕樣式 */
-.button {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s;
+.card-header .coin-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
-.button:hover {
-    background-color: #388e3c;
+
+.card-header .price {
+    font-size: 26px;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    text-align: center;
+}
+
+/* Individual Stat Block */
+.stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat .label {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.stat .value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.stat .quantity,
+.stat .roi {
+    color: #333;
+}
+
+.stat .profit {
+    color: #e74c3c; /* Red for losses */
+}
+
+/* === Button Styles === */
+.btn {
+    border: none;
+    font-family: 'Lato';
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    padding: 25px 80px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.btn-1 { background: #3498db; color: #fff; }
+.btn-1:hover, .btn-1:active { background: #2980b9; top: 2px; }
+.btn-2 { background: #2ecc71; color: #fff; }
+.btn-2:hover, .btn-2:active { background: #27ae60; top: 2px; }
+.btn-3 { background: #e74c3c; color: #fff; }
+.btn-3:hover, .btn-3:active { background: #c0392b; top: 2px; }
+.btn-4 { background: #34495e; color: #fff; }
+.btn-4:hover, .btn-4:active { background: #2c3e50; top: 2px; }
+
+/* === Tab Styles === */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    transition: background-color 0.3s ease;
+}
+
+.tab-button:hover,
+.tab-button.active {
+    background-color: #2980b9;
+    font-weight: bold;
+}
+
+/* === Table Styles === */
+.table-container {
+    margin: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin-top: 40px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+}
+
+th {
+    background-color: #4e7bb6;
+    color: white;
+    font-weight: 600;
+}
+
+td {
+    background-color: #ffffff;
+    color: #555;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* === Form Styles === */
+#tab2 {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+form input, form select {
+    width: 30%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+form input:focus, form select:focus {
+    border-color: #4e7bb6;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #3498db;
+    padding: 10px 30px;
+    border-radius: 8px;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background-color: #e74c3c; /* 背景色：紅色 */
+    color: #ffffff;            /* 字體顏色：白色 */
+    font-size: 12px;           /* 字體大小 */
+    padding: 8px 15px;         /* 內距 */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* hover 時變深紅 */
+    transform: scale(1.05);    /* 放大一點點，強調互動感 */
+    color: #fff;               /* 字體顏色可保持或微調 */
+}
+
+/* === Media Queries for Mobile === */
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: 1fr;
+        margin: 20px;
+    }
+
+    .card {
+        width: 90vw;
+    }
+
+    .card-header h3 {
+        font-size: 22px;
+    }
+
+    .card-header .price {
+        font-size: 24px;
+    }
+
+    .card-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat .label {
+        font-size: 14px;
+    }
+
+    .stat .value {
+        font-size: 16px;
+    }
+
+    form input, form select {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        font-size: 14px;
+    }
+}
+
+/* === Wide Stats Card === */
+.stats-card-wide {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 20px 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+}
+
+.stat-block {
+    flex: 1;
+    text-align: center;
+}
+
+.stat-block.full-width {
+    flex: 100%;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.stat-block h3 {
+    font-size: 25px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.stat-block h4 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.stat-block span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#totalValue {
+    font-size: 30px;
+    font-weight: 800;
+    color: #27ae60;   /* 綠色代表正向成長 */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.15);  /* 微陰影增加立體感 */
+    display: block;
+}
+
+@media (max-width: 768px) {
+    /* 確保卡片在手機上顯示為單列，且佔滿整個畫面 */
+    .card {
+        width: 100%;
+        margin: 10px 0; /* 上下間距 */
+    }
+
+    /* 調整卡片內的標題區域 */
+    .card-header h3 {
+        font-size: 22px;
+    }
+
+    .card-header .price {
+        font-size: 24px;
+    }
 }

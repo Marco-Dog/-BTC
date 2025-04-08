@@ -310,54 +310,84 @@ td:nth-child(8) {
     color: #fff;               /* 字體顏色可保持或微調 */
 }
 
-/* 響應式設計 */
-@media (max-width: 1024px) {
-    /* 螢幕寬度小於 1024px 時，卡片變為兩列 */
-    .card {
-        width: 48%; /* 小螢幕下兩列顯示 */
-    }
-}
+@media screen and (max-width: 768px) {
 
-@media (max-width: 768px) {
-    /* 螢幕寬度小於 768px 時，卡片變為單列 */
-    .card {
-        width: 100%; /* 手機螢幕上單列顯示 */
+    /* 容器內邊距縮小 */
+    .container {
+        width: 95%;
+        padding: 10px;
     }
 
-    /* 表單內元素垂直排列 */
-    form input, form select, form button {
+    /* 頁面標題縮小字體 */
+    h1 {
+        font-size: 2rem;
+    }
+
+    /* 統計區塊改為直排 */
+    .stats-card-wide {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .stat-block {
         width: 100%;
     }
 
-    /* 頁籤區塊在手機上垂直排列 */
+    /* 頁籤垂直排列 */
     .tabs {
         flex-direction: column;
+        align-items: center;
     }
 
     .tablink {
-        margin: 10px 0;
+        width: 90%;
+        margin: 5px 0;
+        font-size: 1rem;
     }
 
-    /* 表格水平滾動 */
-    table {
-        display: block;
+    /* 卡片改為單欄排列 */
+    .card-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card-header h3 {
+        font-size: 24px;
+    }
+
+    .card-header p.price {
+        font-size: 24px;
+    }
+
+    /* 卡片統計資料垂直排列 */
+    .card-stats {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .stat {
+        width: 100%;
+    }
+
+    /* 表單欄位全寬 */
+    form input, form select, form button,
+    #sortOption {
+        max-width: 100%;
+        font-size: 1rem;
+    }
+
+    /* 表格橫向滾動 */
+    .transaction-card {
         overflow-x: auto;
-        white-space: nowrap;
     }
 
-    thead, tbody, th, td, tr {
-        display: inline-block;
-        white-space: nowrap;
+    table {
+        min-width: 700px; /* 確保可橫向滑動 */
     }
 
-    th, td {
-        width: auto;
-        min-width: 120px;
-    }
-
-    /* 調整操作欄較小 */
-    th:nth-child(8),
-    td:nth-child(8) {
-        min-width: 80px;
+    .delete-btn {
+        font-size: 0.85rem;
+        padding: 6px 12px;
     }
 }

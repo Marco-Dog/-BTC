@@ -1,3 +1,5 @@
+// ✅ 整合幣別小數點控制邏輯 + 原有功能
+
 document.addEventListener("DOMContentLoaded", function () {
     loadTransactions();
     fetchPrices();
@@ -15,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 預設顯示第一個頁籤
-    document.querySelector(".tablink").click();
+    document.querySelector(".tablink").click(); // 預設點擊第一個頁籤
 });
 
 let transactions = [];
@@ -24,31 +25,27 @@ let latestPrices = {
     BTC: 0, ETH: 0, ADA: 0, DOGE: 0, SHIB: 0, SOL: 0
 };
 
-// 格式化數字，添加千位分隔符並設置小數點位數
-function formatNumber(number, coin = "default") {
+const coinDisplaySettings = {
+    BTC: { priceDecimals: 2, holdingDecimals: 4 },
+    ETH: { priceDecimals: 2, holdingDecimals: 2 },
+    ADA: { priceDecimals: 2, holdingDecimals: 2 },
+    DOGE: { priceDecimals: 2, holdingDecimals: 2 },
+    SHIB: { priceDecimals: 6, holdingDecimals: 2 },
+    SOL: { priceDecimals: 3, holdingDecimals: 3 },
+    default: { priceDecimals: 2, holdingDecimals: 2 }
+};
+
+function formatNumber(number, coin = "default", type = "price") {
     if (isNaN(number)) return "0";
 
-    let decimals;
-    switch (coin) {
-        case "BTC":
-            decimals = 6;
-            break;
-        case "SHIB":
-            decimals = 6;
-            break;
-        case "SOL":
-            decimals = 3;
-            break;
-        default:
-            decimals = 2;
-    }
+    const settings = coinDisplaySettings[coin] || coinDisplaySettings["default"];
+    const decimals = type === "price" ? settings.priceDecimals : settings.holdingDecimals;
 
     return number.toLocaleString('en-US', {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals
     });
 }
-
 
 function fetchPrices() {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,dogecoin,solana,shiba-inu&vs_currencies=twd")
@@ -77,16 +74,14 @@ function updateCardDisplay() {
         const price = latestPrices[coin];
         const data = holdings[coin] || { quantity: 0, profit: 0, roi: 0 };
 
-        // 更新卡片顯示
-        card.querySelector(".price").textContent = `NT$ ${formatNumber(price)}`;
-        card.querySelector(".quantity").textContent = ` ${formatNumber(data.quantity)}`;
+        card.querySelector(".price").textContent = `NT$ ${formatNumber(price, coin, "price")}`;
+        card.querySelector(".quantity").textContent = ` ${formatNumber(data.quantity, coin, "holding")}`;
         card.querySelector(".profit").textContent = ` NT$ ${formatNumber(data.profit)}`;
-        card.querySelector(".roi").textContent = `${data.roi}%`;  // 顯示報酬率
+        card.querySelector(".roi").textContent = `${data.roi}%`;
     });
 
     updateTotalStats();
 }
-
 
 function updateTotalStats() {
     const holdings = calculateHoldings();
@@ -98,7 +93,7 @@ function updateTotalStats() {
         totalValue += quantity * latestPrices[coin];
     }
 
-    document.getElementById("totalValue").textContent = `NT$ ${formatNumber(totalValue, 2)}`;
+    document.getElementById("totalValue").textContent = `NT$ ${formatNumber(totalValue, "default")}`;
 
     const totalProfit = totalValue - totalCost;
     const totalROI = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
@@ -106,8 +101,8 @@ function updateTotalStats() {
     const profitSpan = document.getElementById("totalProfit");
     const roiSpan = document.getElementById("totalROI");
 
-    profitSpan.textContent = `NT$ ${formatNumber(totalProfit, 2)}`;
-    roiSpan.textContent = `${formatNumber(totalROI, 2)}%`;
+    profitSpan.textContent = `NT$ ${formatNumber(totalProfit, "default")}`;
+    roiSpan.textContent = `${formatNumber(totalROI, "default")}%`;
 
     profitSpan.className = totalProfit >= 0 ? "positive" : "negative";
     roiSpan.className = totalROI >= 0 ? "positive" : "negative";
@@ -155,9 +150,9 @@ function renderTransactions(sortBy = "date") {
                 <td>${tx.date}</td>
                 <td>${tx.currency}</td>
                 <td>${tx.type}</td>
-                <td>${formatNumber(tx.price, 6)}</td>
-                <td>${formatNumber(tx.quantity, 6)}</td>
-                <td>${formatNumber(tx.fee, 3)}</td>
+                <td>${formatNumber(tx.price, tx.currency, "price")}</td>
+                <td>${formatNumber(tx.quantity, tx.currency, "holding")}</td>
+                <td>${formatNumber(tx.fee, "default")}</td>
                 <td>${tx.note}</td>
                 <td><button class="delete-btn" onclick="deleteRow(${index})">刪除</button></td>
             </tr>`;
@@ -183,9 +178,29 @@ function loadTransactions() {
     const saved = localStorage.getItem("transactions");
     if (saved) {
         transactions = JSON.parse(saved);
-        renderTransactions();
+    } else {
+transactions = [
+    { date: "2025-03-28", currency: "BTC", type: "buy", price: 3025000.00, quantity: 0.0025, fee: 7.56, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 12.21, quantity: 165, fee: 2.02, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 11, quantity: 500, fee: 5.5, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.7, quantity: 100, fee: 0.77, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.5, quantity: 1000, fee: 7.5, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.53, quantity: 200, fee: 1.31, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.39, quantity: 200, fee: 1.28, note: "" },
+    { date: "2025-03-28", currency: "ADA", type: "buy", price: 33.35, quantity: 300, fee: 10.01, note: "" },
+    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 8.01, quantity: 660, fee: 5.29, note: "" },
+    { date: "2025-03-28", currency: "ADA", type: "buy", price: 29.67, quantity: 80, fee: 2.37, note: "" },
+    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000724, quantity: 13793103, fee: 9.99, note: "" },
+    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000698, quantity: 5730659, fee: 4, note: "" },
+    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000673, quantity: 1800000, fee: 1.21, note: "" },
+    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000576, quantity: 3000000, fee: 1.73, note: "" },
+    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000511, quantity: 6000000, fee: 3.07, note: "" }
+        ];
+        saveTransactions(); // 儲存初始資料到 localStorage
     }
+    renderTransactions();
 }
+
 
 function calculateHoldings() {
     const holdings = {
@@ -213,13 +228,11 @@ function calculateHoldings() {
     for (const coin in holdings) {
         const h = holdings[coin];
         h.profit = h.quantity > 0 ? h.quantity * latestPrices[coin] - h.cost : 0;
-        // 計算報酬率
         h.roi = h.cost > 0 ? ((h.profit / h.cost) * 100).toFixed(2) : 0;
     }
 
     return holdings;
 }
-
 
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => {

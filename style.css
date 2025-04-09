@@ -369,6 +369,8 @@ table th {
         width: 95%;
         padding: 15px;
         margin: 10px auto;
+        justify-content: center;
+
     }
 
     h1 {
@@ -384,20 +386,20 @@ table th {
 
     .left-side, .right-side {
         align-items: center;
-        width: 100%;
+        width: 90%;
     }
 
     .stat-block {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .card-container {
         grid-template-columns: 1fr; /* 單欄排版 */
-        gap: 20px;
+        gap: 15px;
     }
 
     .card {
-        width: 100%;
+        width: 90%;
         margin: 0 auto;
         align-items: center;
     }
@@ -411,14 +413,16 @@ table th {
     }
 
     .card-stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
     }
 
+     /*輸入欄*/
     form input, form select, form button, #sortOption {
         max-width: 100%;
         font-size: 16px;
     }
+    /*表格*/
      .table-wrapper {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch; /* 提升在 iOS 裝置上的滑動順暢度 */

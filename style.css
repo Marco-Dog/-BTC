@@ -21,33 +21,88 @@ h1 {
     color: #333;
 }
 
-/* 總持倉資訊區塊 */
-.stats-card-wide {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-    gap: 10px;
-}
-
-.stat-block {
-    background-color: #fff;
+/* 總持倉資訊容器 */
+.total-stats-wrapper {
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 20%;
-    text-align: center;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.stat-block h3, .stat-block h4 {
-    margin: 0;
-    color: #444;
+/* 統計卡片 */
+.stats-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.stat-block span {
-    display: block;
-    font-size: 25px; /* 稍微調整字型 */
-    margin-top: 10px;
-    color: #333;
+/* 左側區域 */
+.left-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 右側區域 */
+.right-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+/* 單個統計區塊 */
+.stat-block {
+    margin-bottom: 20px;
+}
+
+/* 統計標題 */
+.stat-block h3 {
+    font-size: 20px; /* 調大標題字體 */
+    color: #333333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* 統計值 */
+.stat-value {
+    font-size: 32px; /* 放大數字字體 */
+    font-weight: 700;
+    color: #2c3e50;
+    transition: color 0.3s ease;
+}
+
+/* 右側區域的數字也放大 */
+.right-side .stat-block .stat-value {
+    font-size: 28px; /* 放大右側數字字體 */
+    font-weight: 700;
+    color: #2c3e50;
+    transition: color 0.3s ease;
+}
+
+/* 動態顏色變化：盈虧與報酬率顯示綠或紅色 */
+#totalProfit {
+    color: #e74c3c;
+}
+
+#totalProfit.positive {
+    color: #27ae60;
+}
+
+#totalROI {
+    color: #e74c3c;
+}
+
+#totalROI.positive {
+    color: #27ae60;
 }
 
 /* 頁籤區塊 */
@@ -304,121 +359,95 @@ table th {
     transform: scale(1.05);
 }
 
-/* 當螢幕寬度小於等於768px時，調整排版和樣式 */
-@media screen and (max-width: 768px) {
-    
-    /* 調整容器寬度以適應小螢幕 */
-    .container {
+/* 響應式設計：手機、平板、桌機自動適應 */
+@media (max-width: 768px) {
+    .container,
+    .total-stats-wrapper,
+    .transaction-card,
+    .form-wrapper,
+    .quote-container {
         width: 95%;
-        padding: 10px;
+        padding: 15px;
+        margin: 10px auto;
     }
 
-    /* 頁面標題調整 */
     h1 {
-        font-size: 2rem; /* 調整標題字體大小 */
-        margin-bottom: 15px;
-    }
-
-    /* 總持倉資訊區塊變為單列顯示 */
-    .stats-card-wide {
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* 調整統計區塊寬度以適應單列顯示 */
-    .stat-block {
-        width: 33%; /* 寬度變為100% */
-        height: 60px;
+        font-size: 2rem;
         text-align: center;
-        font-size: 1rem;
-        margin-bottom: 15px;
-    }
-  
-      .stat-block span {
-        font-size: 1rem; /* 適合小螢幕的字體大小 */
-        white-space: nowrap; /* 禁止換行 */
-
     }
 
-    /* 頁籤區塊 */
-    .tabs {
-        flex-direction: row;
-        gap: 10px;
+    .stats-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .left-side, .right-side {
+        align-items: center;
+        width: 100%;
+    }
+
+    .stat-block {
+        margin-bottom: 20px;
+    }
+
+    .card-container {
+        grid-template-columns: 1fr; /* 單欄排版 */
+        gap: 20px;
+    }
+
+    .card {
+        width: 100%;
+        margin: 0 auto;
         align-items: center;
     }
 
-    .tablink {
-        margin: 5px 0; /* 調整頁籤間距 */
-        padding: 10px 20px;
-    }
-
-    /* 卡片容器調整為單欄顯示 */
-    .card-container {
-        grid-template-columns: 1fr; /* 單列顯示 */
-        gap: 15px;
-    }
-
-    /* 卡片標題調整 */
     .card-header h3 {
+        font-size: 20px;
+    }
+
+    .card-header .price {
         font-size: 24px;
     }
 
-    /* 調整卡片內統計項目的顯示 */
     .card-stats {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 
-    /* 調整表單區塊 */
-    .form-wrapper {
-        padding: 10px;
-    }
-
-    /* 表單欄位調整為100%寬度 */
-    #transactionForm input,
-    #transactionForm select,
-    form input,
-    form select,
-    form button {
-        width: 100%;
-        padding: 12px;
+    form input, form select, form button, #sortOption {
+        max-width: 100%;
         font-size: 16px;
     }
-
-    /* 表格區塊調整 */
-    .table-wrapper {
-        margin-top: 20px;
-        overflow-x: auto; /* 讓表格可以水平捲動 */
+     .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* 提升在 iOS 裝置上的滑動順暢度 */
     }
 
     table {
-        width: 100%;
+        min-width: 600px; /* 最小寬度，避免欄位被擠壓到重疊或斷行 */
+        white-space: nowrap; /* 防止自動換行 */
+    }
+
+    .tablink {
         font-size: 14px;
+        padding: 10px 20px;
+        margin: 5px;
     }
 
-    /* 調整表格欄位寬度，保持響應性 */
     table th, table td {
-        padding: 8px;
-        text-align: center;
+        font-size: 14px;
+        padding: 6px;
     }
 
-    /* 排序下拉選單樣式調整 */
-    #sortOption {
-        width: 100%;
-        padding: 12px 15px;
-    }
-
-    /* 刪除按鈕樣式調整 */
     .delete-btn {
-      width: 90%; /* 增加寬度，使其更寬 */
-      padding: 8px 8px; /* 調整上下內距變小，左右內距變大，讓按鈕扁一點 */
-      font-size: 0.5rem; /* 字型大小設定為 10px */
-      margin-top: 10px;
-      text-align: center; /* 文字水平置中 */
-      display: flex; /* 使用 flexbox 使得文字置中 */
-      justify-content: center; /* 水平置中 */
-      align-items: center; /* 垂直置中 */
-      border-radius: 6px; /* 保持圓角 */
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .card-container {
+        grid-template-columns: repeat(2, 1fr); /* 平板：兩欄排版 */
     }
 }

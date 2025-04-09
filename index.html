@@ -196,49 +196,61 @@
         <!-- 交易紀錄區域 -->
         <div id="transactions" class="tabcontent" style="display:none;">
             <div class="transaction-card">
-                <form id="transactionForm">
-                    <input type="date" id="date" required>
-                    <select id="currency">
-                        <option value="BTC">BTC</option>
-                        <option value="ETH">ETH</option>
-                        <option value="ADA">ADA</option>
-                        <option value="DOGE">DOGE</option>
-                        <option value="SHIB">SHIB</option>
-                        <option value="SOL">SOL</option>
-                    </select>
-                    <select id="type">
-                        <option value="buy">買入</option>
-                        <option value="sell">賣出</option>
-                    </select>
-                    <input type="number" id="price" placeholder="價格" required step="0.00000000001">
-                    <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
-                    <input type="text" id="note" placeholder="備註"><br>
-                    <button type="submit">新增</button>
-                </form>
-                <select id="sortOption">
-                    <option value="date">按日期排序</option>
-                    <option value="currency">按幣別排序</option>
-                    <option value="profit">按獲利排序</option>
-                </select>
+                <!-- 新增一層包裹表單的區塊 -->
+                <div class="form-wrapper">
+                    <form id="transactionForm">
+                        <input type="date" id="date" required>
+                        <select id="currency">
+                            <option value="BTC">BTC</option>
+                            <option value="ETH">ETH</option>
+                            <option value="ADA">ADA</option>
+                            <option value="DOGE">DOGE</option>
+                            <option value="SHIB">SHIB</option>
+                            <option value="SOL">SOL</option>
+                        </select>
+                        <select id="type">
+                            <option value="buy">買入</option>
+                            <option value="sell">賣出</option>
+                        </select>
+                        <input type="number" id="price" placeholder="價格" required step="0.00000000001">
+                        <input type="number" id="quantity" placeholder="數量" required step="0.00000000001">
+                        <input type="text" id="note" placeholder="備註"><br>
+                        <button type="submit">新增</button>
+                    </form>
+                </div> <!-- form-wrapper end -->
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>日期</th>
-                            <th>幣別</th>
-                            <th>類型</th>
-                            <th>價格</th>
-                            <th>數量</th>
-                            <th>手續費</th>
-                            <th>備註</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionTable"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+                <!-- 排序選項與表格放在同一個容器 -->
+                <div class="table-wrapper">
+                    <!-- 排序選項區域 -->
+                    <div class="table-header">
+                        <select id="sortOption">
+                            <option value="date">按日期排序</option>
+                            <option value="currency">按幣別排序</option>
+                            <option value="profit">按獲利排序</option>
+                        </select>
+                    </div> <!-- table-header end -->
+
+                    <!-- 表格區域 -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>幣別</th>
+                                <th>類型</th>
+                                <th>價格</th>
+                                <th>數量</th>
+                                <th>手續費</th>
+                                <th>備註</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTable"></tbody>
+                    </table>
+                </div> <!-- table-wrapper end -->
+            </div> <!-- transaction-card end -->
+        </div> <!-- transactions end -->
+
+
 
     <script src="app.js"></script>
 </body>

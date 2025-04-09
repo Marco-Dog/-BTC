@@ -1,5 +1,3 @@
-// ✅ 整合幣別小數點控制邏輯 + 原有功能
-
 document.addEventListener("DOMContentLoaded", function () {
     loadTransactions();
     fetchPrices();
@@ -60,6 +58,7 @@ function fetchPrices() {
                 SOL: data.solana.twd
             };
             updateCardDisplay();
+            renderTransactions(); // 在這裡 render 交易資料
         })
         .catch(err => console.error("取得價格錯誤:", err));
 }
@@ -145,6 +144,15 @@ function renderTransactions(sortBy = "date") {
     });
 
     transactions.forEach((tx, index) => {
+        const currentPrice = latestPrices[tx.currency] || 0;
+        const currentValue = currentPrice * tx.quantity;
+        const cost = tx.price * tx.quantity + tx.fee;
+        const profit = currentValue - cost;
+        const roi = cost > 0 ? (profit / cost) * 100 : 0;
+
+        const profitClass = profit >= 0 ? "positive" : "negative";
+        const roiClass = roi >= 0 ? "positive" : "negative";
+
         table.innerHTML += `
             <tr>
                 <td>${tx.date}</td>
@@ -153,6 +161,8 @@ function renderTransactions(sortBy = "date") {
                 <td>${formatNumber(tx.price, tx.currency, "price")}</td>
                 <td>${formatNumber(tx.quantity, tx.currency, "holding")}</td>
                 <td>${formatNumber(tx.fee, "default")}</td>
+                <td class="${profitClass}">NT$ ${formatNumber(profit, "default")}</td>
+                <td class="${roiClass}">${formatNumber(roi, "default")}%</td>
                 <td>${tx.note}</td>
                 <td><button class="delete-btn" onclick="deleteRow(${index})">刪除</button></td>
             </tr>`;
@@ -179,28 +189,27 @@ function loadTransactions() {
     if (saved) {
         transactions = JSON.parse(saved);
     } else {
-transactions = [
-    { date: "2025-03-28", currency: "BTC", type: "buy", price: 3025000.00, quantity: 0.0025, fee: 7.56, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 12.21, quantity: 165, fee: 2.02, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 11, quantity: 500, fee: 5.5, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.7, quantity: 100, fee: 0.77, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.5, quantity: 1000, fee: 7.5, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.53, quantity: 200, fee: 1.31, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.39, quantity: 200, fee: 1.28, note: "" },
-    { date: "2025-03-28", currency: "ADA", type: "buy", price: 33.35, quantity: 300, fee: 10.01, note: "" },
-    { date: "2025-03-28", currency: "DOGE", type: "buy", price: 8.01, quantity: 660, fee: 5.29, note: "" },
-    { date: "2025-03-28", currency: "ADA", type: "buy", price: 29.67, quantity: 80, fee: 2.37, note: "" },
-    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000724, quantity: 13793103, fee: 9.99, note: "" },
-    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000698, quantity: 5730659, fee: 4, note: "" },
-    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000673, quantity: 1800000, fee: 1.21, note: "" },
-    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000576, quantity: 3000000, fee: 1.73, note: "" },
-    { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000511, quantity: 6000000, fee: 3.07, note: "" }
-        ];
+    transactions = [
+        { date: "2025-03-28", currency: "BTC", type: "buy", price: 3025000.00, quantity: 0.0025, fee: 7.56, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 12.21, quantity: 165, fee: 2.02, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 11, quantity: 500, fee: 5.5, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.7, quantity: 100, fee: 0.77, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 7.5, quantity: 1000, fee: 7.5, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.53, quantity: 200, fee: 1.31, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 6.39, quantity: 200, fee: 1.28, note: "" },
+        { date: "2025-03-28", currency: "ADA", type: "buy", price: 33.35, quantity: 300, fee: 10.01, note: "" },
+        { date: "2025-03-28", currency: "DOGE", type: "buy", price: 8.01, quantity: 660, fee: 5.29, note: "" },
+        { date: "2025-03-28", currency: "ADA", type: "buy", price: 29.67, quantity: 80, fee: 2.37, note: "" },
+        { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000724, quantity: 13793103, fee: 9.99, note: "" },
+        { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000698, quantity: 5730659, fee: 4, note: "" },
+        { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000673, quantity: 1800000, fee: 1.21, note: "" },
+        { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000576, quantity: 3000000, fee: 1.73, note: "" },
+        { date: "2025-03-28", currency: "SHIB", type: "buy", price: 0.000511, quantity: 6000000, fee: 3.07, note: "" }
+            ];
         saveTransactions(); // 儲存初始資料到 localStorage
     }
-    renderTransactions();
+    // 不在這裡呼叫 renderTransactions，等價格載入後再渲染
 }
-
 
 function calculateHoldings() {
     const holdings = {

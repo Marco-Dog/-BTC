@@ -78,108 +78,94 @@ h1 {
     color: white;
 }
 
-/* 卡片設計 */
+* === Card Styles === */
+/* 外層容器 - 即時報價區域的殼 */
+.quote-container {
+    background-color: #ffffff; /* 背景顏色 */
+    border-radius: 12px; /* 圓角 */
+    padding: 20px; /* 內邊距 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影 */
+    margin: 20px; /* 外邊距 */
+}
+
+/* 卡片區域 - 內部容器 */
 .card-container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(210px, 1fr)); /* 每個卡片的最小寬度是 250px，並保持響應式 */
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 三個卡片一列 */
+    gap: 10px;
+    justify-content: center;
 }
 
 .card {
-    background-color: #fff;
-    border-radius: 6px;
+    background-color: white;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    box-sizing: border-box;
-    text-align: left;
+    padding: 10px;
+    width: 90%; /* 改為100%寬度，讓它在小屏幕下可以填滿容器 */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px 0; /* 增加上下間距，確保卡片不會貼得太緊 */
 }
 
-/* 卡片標題部分 */
 .card-header {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column; /* 讓標題垂直排列 */
-    align-items: center; /* 讓內容在水平方向居中 */
-    text-align: center; /* 讓文字居中 */
-}
-
-/* 幣別名稱樣式 */
-.card-header h3 {
-    font-size: 30px; /* 相對單位 */
-    margin: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center; /* 確保圖標與文字在同一行 */
-}
-
-.card-header h3 .coin-icon {
-    margin-right: 15px; /* 在圖標和文本之間添加空格 */
-}
-
-/* 幣別圖標 */
-.coin-icon {
-    width: 30px; /* 圖標大小 */
-    height: 30px;
-}
-
-/* 幣別價格樣式 */
-.card-header p.price {
-    font-size: 30px; /* 放大即時報價數字 */
-    font-weight: bold;
-    color: #4e7bb6;
-    white-space: nowrap; /* 防止換行 */
-}
-
-/* 交易卡片統計數據區塊 */
-.card-stats {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    gap: 10px; /* 控制統計項目間距 */
-}
-
-/* 單一統計項目 */
-.stat {
     text-align: center;
-    width: 30%;
-    margin-bottom: 5px; /* 統計項目之間的間距縮小 */
+    margin-bottom: 20px;
+}
+
+.card-header h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card-header .coin-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.card-header .price {
+    font-size: 28px;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    text-align: center;
+}
+
+/* Individual Stat Block */
+.stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat .label {
-    display: block;
-    font-size: 18px;
-    color: #666;
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 5px;
 }
 
 .stat .value {
     font-size: 18px;
     font-weight: bold;
+}
+
+.stat .quantity,
+.stat .roi {
     color: #333;
 }
 
-/* 持倉獲利的NT$放在下一行 */
 .stat .profit {
-    display: block;
-    font-size: 18px;
-    font-weight: bold;
-    color: #4caf50;
-    margin-top: 5px;
+    color: #e74c3c; /* Red for losses */
 }
-
-/* 調整即時報價不換行，並放大數字 */
-.card-header .price {
-    font-size: 18px;  /* 放大即時報價數字 */
-    font-weight: bold;
-    color: #4e7bb6;
-    white-space: nowrap; /* 防止換行 */
-}
-
-.card .card-stats .stat .label {
-    font-size: 0.9rem;
-    color: #777;
-}
-
 
 /* 交易紀錄區域 */
 .transaction-card {
@@ -291,40 +277,12 @@ table th {
     font-weight: bold;
 }
 
-/* 先設定所有欄位為均寬 */
-th:nth-child(1),
-th:nth-child(2),
-th:nth-child(3),
-th:nth-child(4),
-th:nth-child(6),
-th:nth-child(7),
-th:nth-child(8),
-td:nth-child(1),
-td:nth-child(2),
-td:nth-child(3),
-td:nth-child(4),
-td:nth-child(6),
-td:nth-child(7),
-td:nth-child(8) {
-    width: 12%;
+.positive {
+    color: green;
 }
 
-/* 日期欄寬一點點 */
-th:nth-child(1),
-td:nth-child(1) {
-    width: 18%;
-}
-
-/* 數量欄寬一點點 */
-th:nth-child(5),
-td:nth-child(5) {
-    width: 18%;
-}
-
-/* 操作欄窄一點點 */
-th:nth-child(8),
-td:nth-child(8) {
-    width: 8%;
+.negative {
+    color: red;
 }
 
 /* 刪除按鈕樣式 */

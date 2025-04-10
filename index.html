@@ -224,16 +224,17 @@
                 </div> <!-- form-wrapper end -->
 
                 <!-- 排序選項與表格放在同一個容器 -->
-                <div class="table-wrapper">
-                    <!-- 排序選項區域 -->
-                    <div class="table-header">
-                        <select id="sortOption">
-                            <option value="date">按日期排序</option>
-                            <option value="currency">按幣別排序</option>
-                            <option value="profit">按獲利排序</option>
-                        </select>
-                    </div> <!-- table-header end -->
+                <div class="table-controls">
+                    <select id="sortOption">
+                        <option value="date">按日期排序</option>
+                        <option value="currency">按幣別排序</option>
+                        <option value="profit">按獲利排序</option>
+                    </select>
+                </div>
 
+                <div class="scroll-hint">↔️左右滑動可查看更多欄位↔️</div>
+
+                <div class="table-wrapper">
                     <!-- 表格區域 -->
                     <table>
                         <thead>

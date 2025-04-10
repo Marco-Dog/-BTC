@@ -244,7 +244,7 @@ function calculateHoldings() {
         const h = holdings[coin];
         const marketValue = h.quantity * latestPrices[coin];
         const unrealized = marketValue - h.cost;
-        h.profit = unrealized + h.realized;
+        h.profit = unrealized + h.realized
         h.roi = h.cost > 0 ? ((h.profit / h.cost) * 100).toFixed(2) : "0";
     }
 

@@ -344,6 +344,9 @@ form button:hover {
 
 .table-wrapper {
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 700px;
+
 }
 
 table {

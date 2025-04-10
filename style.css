@@ -147,6 +147,7 @@ h1 {
 .card-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 三個卡片一列 */
+    margin-top: 20px;
     gap: 10px;
     justify-content: center;
 }
@@ -182,34 +183,37 @@ h1 {
 }
 
 .card-header .price {
-    font-size: 28px;
+    font-size: 30px;
     color: #3498db;
     font-weight: bold;
 }
 
 .card-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;  /* 使項目均勻分布 */
+    align-items: center;
+    gap: 20px; /* 控制項目之間的間距 */
+    width: 100%;
+    text-align: center; /* 使內容水平置中 */
 }
 
 /* Individual Stat Block */
 .stat {
+    flex: 1;  /* 每個項目等分可用空間 */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: column;  /* 使標籤和數值垂直排列 */
     align-items: center;
+    justify-content: center;
 }
 
 .stat .label {
-    font-size: 16px;
-    color: #777;
+    font-size: 12px;
+    color: #888;
     margin-bottom: 5px;
 }
 
 .stat .value {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
 }
 
@@ -293,7 +297,8 @@ form button {
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
+    margin-top: 0; /* 拿掉上方空隙 */
+    margin-bottom: 10px; /* 保持與下方的距離 */
 }
 
 form button:hover {
@@ -305,12 +310,11 @@ form button:hover {
     width: 100%;
     max-width: 400px;
     padding: 12px 15px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px;
     background-color: #f8f8f8;
-    margin-top: 10px;
     color: #333;
 }
 
@@ -340,6 +344,14 @@ table th {
     color: red;
 }
 
+.scroll-hint {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 5px;
+    text-align: right;
+    display: none;
+}
+
 /* 刪除按鈕樣式 */
 .delete-btn {
     background-color: #e74c3c; /* 背景色：紅色 */
@@ -359,7 +371,6 @@ table th {
     transform: scale(1.05);
 }
 
-/* 響應式設計：手機、平板、桌機自動適應 */
 @media (max-width: 768px) {
     .container,
     .total-stats-wrapper,
@@ -370,12 +381,20 @@ table th {
         padding: 15px;
         margin: 10px auto;
         justify-content: center;
-
     }
 
     h1 {
         font-size: 2rem;
         text-align: center;
+    }
+
+    .tabs {
+        margin-bottom: 5px;
+    }
+
+    .form-wrapper {
+        margin-top: 0 !important;
+        padding-top: 5px;
     }
 
     .stats-card {
@@ -385,7 +404,6 @@ table th {
     }
 
     .left-side, .right-side {
-        align-items: center;
         width: 90%;
     }
 
@@ -394,12 +412,13 @@ table th {
     }
 
     .card-container {
-        grid-template-columns: 1fr; /* 單欄排版 */
-        gap: 15px;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .card {
         width: 90%;
+        max-width: 400px;
         margin: 0 auto;
         align-items: center;
     }
@@ -417,20 +436,24 @@ table th {
         gap: 10px;
     }
 
-     /*輸入欄*/
     form input, form select, form button, #sortOption {
         max-width: 100%;
         font-size: 16px;
     }
-    /*表格*/
-     .table-wrapper {
+
+    .table-wrapper {
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch; /* 提升在 iOS 裝置上的滑動順暢度 */
     }
 
     table {
-        min-width: 600px; /* 最小寬度，避免欄位被擠壓到重疊或斷行 */
-        white-space: nowrap; /* 防止自動換行 */
+        min-width: 600px;
+        white-space: nowrap;
+    }
+
+    .scroll-hint {
+        display: block;
+        font-size: 14px;
+        text-align: center;
     }
 
     .tablink {
@@ -452,6 +475,6 @@ table th {
 
 @media (min-width: 769px) and (max-width: 1024px) {
     .card-container {
-        grid-template-columns: repeat(2, 1fr); /* 平板：兩欄排版 */
+        grid-template-columns: repeat(2, 1fr);
     }
 }

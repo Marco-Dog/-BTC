@@ -213,31 +213,39 @@ function loadTransactions() {
 
 function calculateHoldings() {
     const holdings = {
-        BTC: { quantity: 0, cost: 0, profit: 0, roi: 0 },
-        ETH: { quantity: 0, cost: 0, profit: 0, roi: 0 },
-        ADA: { quantity: 0, cost: 0, profit: 0, roi: 0 },
-        DOGE: { quantity: 0, cost: 0, profit: 0, roi: 0 },
-        SHIB: { quantity: 0, cost: 0, profit: 0, roi: 0 },
-        SOL: { quantity: 0, cost: 0, profit: 0, roi: 0 }
+        BTC: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 },
+        ETH: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 },
+        ADA: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 },
+        DOGE: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 },
+        SHIB: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 },
+        SOL: { quantity: 0, cost: 0, profit: 0, roi: 0, realized: 0 }
     };
 
     transactions.forEach(tx => {
-        if (!holdings[tx.currency]) return;
         const h = holdings[tx.currency];
+        if (!h) return;
 
         if (tx.type === "buy") {
             h.quantity += tx.quantity;
             h.cost += tx.price * tx.quantity + tx.fee;
-        } else {
+        } else if (tx.type === "sell") {
+            const avgCost = h.quantity > 0 ? h.cost / h.quantity : 0;
+            const sellCost = avgCost * tx.quantity;
+            const revenue = tx.price * tx.quantity;
+            const realizedProfit = revenue - sellCost - tx.fee;
+
             h.quantity -= tx.quantity;
-            h.cost -= tx.price * tx.quantity + tx.fee;
+            h.cost -= sellCost;
+            h.realized += realizedProfit;
         }
     });
 
     for (const coin in holdings) {
         const h = holdings[coin];
-        h.profit = h.quantity > 0 ? h.quantity * latestPrices[coin] - h.cost : 0;
-        h.roi = h.cost > 0 ? ((h.profit / h.cost) * 100).toFixed(2) : 0;
+        const marketValue = h.quantity * latestPrices[coin];
+        const unrealized = marketValue - h.cost;
+        h.profit = unrealized + h.realized;
+        h.roi = h.cost > 0 ? ((h.profit / h.cost) * 100).toFixed(2) : "0";
     }
 
     return holdings;

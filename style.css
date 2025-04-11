@@ -173,15 +173,9 @@ h1 {
 
 /* === 表單區域 === */
 .form-wrapper {
-    background-color: #ffffff;
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-    margin: 50px auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    text-align: center;
+    display: grid;
+    background-color: #FFFFFF;
+    gap: 20px;
 }
 
 .form-wrapper:hover {
@@ -214,7 +208,7 @@ input[type="date"],
 input[type="number"],
 input[type="text"],
 select {
-    width: 100%;
+    width: 90%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -239,9 +233,14 @@ select::placeholder {
     color: #aaa;
 }
 
+.select-type {
+    width: 90%; /* 或你要的寬度 */
+    max-width: 100%;
+}
+
 form button {
-    width: 100%;
-    max-width: 300px;
+    width: 50%;
+    max-width: 200px;
     padding: 12px 15px;
     margin-bottom: 10px;
     border: none;
@@ -270,14 +269,14 @@ form button:active {
 }
 
 #sortOption {
-    width: 100%;
+    width: 90%;
     max-width: 400px;
     padding: 12px 15px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
-    background-color: #f8f8f8;
+    background-color: #FFFFFF;
     color: #333;
 }
 
@@ -356,14 +355,10 @@ tr:hover {
 
     .form-wrapper {
         padding: 10px;
+        margin: 20px auto; /* 確保在手機上也保持水平置中 */
+        max-width: 100%;   /* 可以加上這行讓它在小螢幕上更順應寬度 */
     }
-    
-    .table-wrapper {
-        max-height: 700px;
-        overflow-y: auto;
 
-    }
-    
     .stats-card {
         flex-direction: column;
         align-items: stretch;

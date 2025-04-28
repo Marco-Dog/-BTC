@@ -26,8 +26,8 @@ let latestPrices = {
 const coinDisplaySettings = {
     BTC: { priceDecimals: 2, holdingDecimals: 4 },
     ETH: { priceDecimals: 2, holdingDecimals: 2 },
-    ADA: { priceDecimals: 2, holdingDecimals: 2 },
-    DOGE: { priceDecimals: 2, holdingDecimals: 2 },
+    ADA: { priceDecimals: 4, holdingDecimals: 2 },
+    DOGE: { priceDecimals: 4, holdingDecimals: 2 },
     SHIB: { priceDecimals: 6, holdingDecimals: 2 },
     SOL: { priceDecimals: 3, holdingDecimals: 3 },
     default: { priceDecimals: 2, holdingDecimals: 2 }

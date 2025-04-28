@@ -155,15 +155,12 @@ function renderTransactions(sortBy = "date") {
 
         table.innerHTML += `
             <tr>
-                <td>${tx.date}</td>
                 <td>${tx.currency}</td>
-                <td>${tx.type}</td>
                 <td>${formatNumber(tx.price, tx.currency, "price")}</td>
                 <td>${formatNumber(tx.quantity, tx.currency, "holding")}</td>
                 <td>${formatNumber(tx.fee, "default")}</td>
                 <td class="${profitClass}">NT$ ${formatNumber(profit, "default")}</td>
                 <td class="${roiClass}">${formatNumber(roi, "default")}%</td>
-                <td>${tx.note}</td>
                 <td><button class="delete-btn" onclick="deleteRow(${index})">刪除</button></td>
             </tr>`;
     });
